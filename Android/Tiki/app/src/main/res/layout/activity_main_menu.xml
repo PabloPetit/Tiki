@@ -17,15 +17,17 @@
         android:layout_marginBottom="154dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:minWidth="250dp" />
+        android:minWidth="250dp"
+        android:onClick="connexion" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Paramètres"
-        android:id="@+id/buttonParametre"
+        android:text="Settings"
+        android:id="@+id/buttonSettings"
         android:minWidth="250dp"
         android:layout_alignTop="@+id/buttonConnexion"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="81dp" />
+        android:layout_marginTop="81dp"
+        android:onClick="settings" />
 </RelativeLayout>

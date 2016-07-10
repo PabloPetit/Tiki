@@ -80,7 +80,7 @@ public class Client extends Thread {
         while (!terminated){
 
         }
-        
+
     }
 
 }
