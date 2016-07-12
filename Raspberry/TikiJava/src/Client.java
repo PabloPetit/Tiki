@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.util.HashMap;
 
 /**
  * Created by Pablo on 10/07/2016.
@@ -8,13 +9,13 @@ public class Client extends Thread {
 
     private static String DEFAULT_NAME = "NO_NAME";
     private static String DEFAULT_ID = "-1";
-
+    private static String DEFAULT_PASSWORD = "";
 
     private Server server;
     private Socket socket;
     private ClientInfo info;
-    private BufferedReader br;
-    private PrintWriter pw;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
     private boolean terminated;
 
@@ -23,43 +24,31 @@ public class Client extends Thread {
         this.socket = socket;
         this.server = server;
         this.info = null;
-        this.br = null;
-        this.pw = null;
+        this.input = null;
+        this.output = null;
         this.terminated = false;
     }
 
-    private void setClientInfo(String id, String name, String path){
+    private boolean setClientInfo(String id, String name, String path){
 
         ClientInfo tmp = ClientInfo.findClientInfo(id,path);
 
         if (tmp != null){
             info = tmp;
-            return;
+            return true;
         }
 
         info = new ClientInfo(server.getNewId(),name);
-    }
-
-    private boolean login(){
-
-        String id = DEFAULT_ID;
-        String name = DEFAULT_NAME;
-
-
-
-
-
-
-        setClientInfo(id,name,server.getResPath());
-        return true;
+        return false;
     }
 
     private boolean init(){
 
         try{
 
-            br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            pw = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            output = new ObjectOutputStream(socket.getOutputStream());
+            input = new ObjectInputStream(socket.getInputStream());
+
 
         }catch (IOException e){
             System.out.println("Socket unreadable");
@@ -71,15 +60,92 @@ public class Client extends Thread {
 
     }
 
+    private boolean login(){
+        String id = DEFAULT_ID;
+        String name = DEFAULT_NAME;
+        String password = DEFAULT_PASSWORD;
+
+        try {
+
+
+            //Step 1 : send the server name
+            Proto server_name = new Proto(Proto.SERVER_NAME);
+            server_name.getData().put("NAME",server.getServerInfo().getName());
+
+            output.writeObject(server_name);
+            output.flush();
+
+            //Step 2 : received log info and check password
+
+            Proto logData = (Proto)input.readObject();
+
+            password = (String)(logData.getData().get("PASS"));
+            id = (String)(logData.getData().get("ID"));
+            name = (String)(logData.getData().get("NAME"));
+
+            if(password.equals(server.getServerInfo().getPassword())){
+
+                //Step 3 : Match id, if new, send new id
+
+                boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
+
+                if (newIdNeeded){
+                    Proto newId = new Proto(Proto.NEW_ID);
+                    newId.getData().put("ID",server.getNewId());
+                    output.writeObject(newId);
+                    output.flush();
+                }
+
+                //Step 4 :
+
+                Proto accepted = new Proto(Proto.ACCEPTED);
+                output.writeObject(accepted);
+                output.flush();
+
+                // Is ACK necessary ?
+
+            }else {
+                Proto denied = new Proto(Proto.DENIED);
+                output.writeObject(denied);
+                output.flush();
+                return false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    private void terminate(){
+        try {
+            input.close();
+            output.close();
+            socket.close();
+            info.save(server.getResPath()); // Maybe not necessary
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        server.getClients().remove(this);
+        //Cilent maybe not set
+        //System.out.println("Connexion with client ["+info.getName()+" ; "+info.getId()+" ] ended");
+    }
+
     @Override
     public void run(){
-
 
         terminated = init();
 
         while (!terminated){
 
         }
+
+        terminate();
 
     }
 

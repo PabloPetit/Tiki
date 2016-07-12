@@ -74,7 +74,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editTextIP"
                 android:layout_weight="1"
-                android:autoText="false" />
+                android:autoText="false"
+                android:inputType="textPersonName" />
         </LinearLayout>
 
         <LinearLayout

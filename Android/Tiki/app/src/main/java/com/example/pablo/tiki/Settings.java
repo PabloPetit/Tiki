@@ -1,5 +1,7 @@
 package com.example.pablo.tiki;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +18,16 @@ public class Settings extends AppCompatActivity {
     public static final String DEFAULT_PASSWORD = "";
 
 
+
+    public static final String FILENAME = "SETTINGS";
+    public static final int MODE = 0;
     public static final String SET = "SET";
     public static final String NAME = "NAME";
     public static final String IP = "IP";
     public static final String ID = "ID";
     public static final String PORT = "PORT";
     public static final String  PASSWORD = "PASSWORD";
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,46 +35,63 @@ public class Settings extends AppCompatActivity {
         setFields();
     }
 
+    public static void initSettings(Context context){
+        SharedPreferences settings = context.getSharedPreferences(FILENAME,MODE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString(SET,SET);
+        editor.putString(NAME,DEFAULT_NAME);
+        editor.putString(IP,DEFAULT_IP);
+        editor.putString(PASSWORD,DEFAULT_PASSWORD);
+        editor.putInt(PORT,DEFAULT_PORT);
+        editor.putInt(ID,DEFAULT_ID);
+
+        editor.commit();
+
+    }
+
 
     public void setFields(){
 
-        SharedPreferences settings = getPreferences(0);
+        SharedPreferences settings = getSharedPreferences(FILENAME,MODE);
 
-        if (! settings.contains("SET")){
-            // Set initial fields
+        if (!settings.contains("SET")){
+            initSettings(getApplicationContext());
         }
 
         TextView name = (TextView) findViewById(R.id.editTextName);
-        name.setText(settings.getString());
+        name.setText(settings.getString(NAME,DEFAULT_NAME));
 
         TextView ip = (TextView) findViewById(R.id.editTextIP);
-        ip.setText(settings.getIp());
+        ip.setText(settings.getString(IP,DEFAULT_IP));
 
         TextView port = (TextView) findViewById(R.id.editTextPort);
-        port.setText(settings.getPort()+"");
+        port.setText(settings.getInt(PORT,0)+"");
 
         TextView pass = (TextView) findViewById(R.id.editTextPassword);
-        pass.setText(settings.getPassword());
+        pass.setText(settings.getString(PASSWORD,DEFAULT_PASSWORD));
 
     }
 
     public void submit(View v){
 
-
         TextView name = (TextView) findViewById(R.id.editTextName);
-        settings.setName(name.getText().toString());
-
         TextView ip = (TextView) findViewById(R.id.editTextIP);
-        settings.setIp(ip.getText().toString());
-
         TextView port = (TextView) findViewById(R.id.editTextPort);
-
-        settings.setPort(Integer.parseInt(port.getText().toString()));
-
         TextView pass = (TextView) findViewById(R.id.editTextPassword);
-        settings.setPassword(pass.getText().toString());
 
-        Settings.saveSettings(settings);
+        SharedPreferences settings = v.getContext().getSharedPreferences(FILENAME,MODE);
+        SharedPreferences.Editor editor = settings.edit();
+
+        editor.putString(NAME,name.getText().toString());
+        editor.putString(IP,ip.getText().toString());
+        editor.putString(PASSWORD,pass.getText().toString());
+        editor.putInt(PORT,Integer.parseInt(port.getText().toString()));
+
+        editor.commit();
+
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
 
     }
 }

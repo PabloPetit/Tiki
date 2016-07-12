@@ -7,6 +7,7 @@ public class ServerInfo implements Serializable{
 
     private static final String DEFAULT_NAME = "Tahuiti";
     private static final String DEFAULT_PASSWORD = "password";
+    private static final String DEFAULT_MASTER_PASS = "superPassword";
 
     private String name;
     private String password;

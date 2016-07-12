@@ -70,5 +70,27 @@ public class ClientInfo implements Serializable {
         return null;
     }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getNbConnexions() {
+        return nbConnexions;
+    }
+
+    public void setNbConnexions(int nbConnexions) {
+        this.nbConnexions = nbConnexions;
+    }
 }
