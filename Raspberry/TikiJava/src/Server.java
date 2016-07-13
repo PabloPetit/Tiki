@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Server extends Thread{
 
     public static final String DEFAULT_IP = "192.168.1.113";
     public static final int DEFAULT_PORT = 4200;
+    public static final int QUEUE_SIZE = 20;
 
     private String ip;
     private int port;
@@ -47,7 +49,8 @@ public class Server extends Thread{
     public boolean openServer(){
         try {
             System.out.println("Opening server ...");
-            socket = new ServerSocket(port);
+            InetAddress addr = InetAddress.getByName(ip);
+            socket = new ServerSocket(port,QUEUE_SIZE,addr);
             System.out.println("The server is now open on :\n\nip : "
                     +socket.getInetAddress().getHostName()
                     +"\nport : " +socket.getLocalPort() + ".\n");
