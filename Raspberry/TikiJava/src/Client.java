@@ -51,7 +51,7 @@ public class Client extends Thread {
 
 
         }catch (IOException e){
-            System.out.println("Socket unreadable");
+            System.err.println("Socket unreadable");
             e.printStackTrace();
             return false;
         }

@@ -55,7 +55,7 @@ public class Server extends Thread{
             return true;
 
         }catch (IOException e){
-            System.out.println("Failed to open the server");
+            System.err.println("Failed to open the server");
             e.printStackTrace();
             return false;
         }
@@ -79,7 +79,7 @@ public class Server extends Thread{
                 newClient.run();
 
             }catch (IOException e){
-                System.out.println("The server failed to accept a client");
+                System.err.println("The server failed to accept a client");
                 e.printStackTrace();
             }
         }

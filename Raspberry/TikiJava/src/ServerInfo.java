@@ -49,6 +49,10 @@ public class ServerInfo implements Serializable{
 
         File root = new File(path);
 
+        if (root==null){
+            return null;
+        }
+
         for (File f : root.listFiles()) {
 
             String tmp = f.getName().replace(".tki", "");
@@ -66,11 +70,11 @@ public class ServerInfo implements Serializable{
                     return info;
 
                 } catch (IOException e) {
-                    System.out.println("Server info recovery failed");
+                    System.err.println("Server info recovery failed");
                     e.printStackTrace();
 
                 } catch (ClassNotFoundException e) {
-                    System.out.println("Server info recovery failed");
+                    System.err.println("Server info recovery failed");
                     e.printStackTrace();
                 }
             }

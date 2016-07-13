@@ -65,7 +65,7 @@ public class ClientInfo implements Serializable {
             }
         }
 
-        System.out.println("Client info not found");
+        System.err.println("Client info not found");
 
         return null;
     }

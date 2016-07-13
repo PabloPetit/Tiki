@@ -5,11 +5,15 @@ public class Main {
 
         String ip = Server.DEFAULT_IP;
         int port = Server.DEFAULT_PORT;
-        String resPath = "~/Documents/TikiRes";
+        String resPath = "/home/pi/Documents/TikiRes";
 
         //Parsing arguments
 
         ServerInfo info = ServerInfo.findServerInfo(resPath);
+
+        if (info == null){
+            System.err.println("Server info recovery failed");
+        }
 
         Server server = new Server(ip,port,info,resPath);
 
