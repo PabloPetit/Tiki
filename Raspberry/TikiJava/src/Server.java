@@ -53,7 +53,7 @@ public class Server extends Thread{
             socket = new ServerSocket(port,QUEUE_SIZE,addr);
             System.out.println("The server is now open on :\n\nip : "
                     +socket.getInetAddress().getHostName()
-                    +"\nport : " +socket.getLocalPort() + ".\n");
+                    +"\nport : " +socket.getLocalPort() + "\n");
 
             return true;
 

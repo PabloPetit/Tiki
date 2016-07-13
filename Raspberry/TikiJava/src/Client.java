@@ -67,7 +67,6 @@ public class Client extends Thread {
 
         try {
 
-
             //Step 1 : send the server name
             Proto server_name = new Proto(Proto.SERVER_NAME);
             server_name.getData().put("NAME",server.getServerInfo().getName());
@@ -102,7 +101,11 @@ public class Client extends Thread {
                 output.writeObject(accepted);
                 output.flush();
 
-                // Is ACK necessary ?
+                Proto ack = (Proto) input.readObject();
+
+                if(ack.getPerformative() != Proto.ACK){
+                    return false;
+                }
 
             }else {
                 Proto denied = new Proto(Proto.DENIED);
@@ -132,8 +135,13 @@ public class Client extends Thread {
         }
 
         server.getClients().remove(this);
-        //Cilent maybe not set
-        //System.out.println("Connexion with client ["+info.getName()+" ; "+info.getId()+" ] ended");
+
+        if (info != null){
+            System.out.println("Connexion with client ["+info.getName()+" ; "+info.getId()+" ] ended");
+        }
+        else {
+            System.out.println("Connexion with anonymous client ended");
+        }
     }
 
     @Override

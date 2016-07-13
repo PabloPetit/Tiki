@@ -2,10 +2,15 @@ package com.example.pablo.tiki;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.util.Log;
+import android.view.View;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
 
 /**
  * Created by Pablo on 10/07/2016.
@@ -17,43 +22,48 @@ public class Connexion {
     public static ObjectOutputStream output;
     public static boolean connected = false;
     public static boolean logged = false;
-
-
     public static String serverName = "NOT_SET";
 
-    public static boolean connect(Context context){
+}
 
+class Connect extends AsyncTask{
+
+
+    @Override
+    protected Object doInBackground(Object[] params) {
+
+        MainMenu main = (MainMenu)params[0];
+        Context context = (Context) params[1];
         SharedPreferences settings = context.getSharedPreferences(Settings.FILENAME,Settings.MODE);
 
-        try {
-            socket = new Socket(settings.getString(Settings.IP,Settings.DEFAULT_IP),
-                    settings.getInt(Settings.PORT,Settings.DEFAULT_PORT));
+        main.showLoadingAnimtion();
 
-            output = new ObjectOutputStream(socket.getOutputStream());
-            input = new ObjectInputStream(socket.getInputStream());
-
-            connected = true;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        return true;
-
-    }
-
-    public static boolean loggin(Context context){
-
-        SharedPreferences settings = context.getSharedPreferences(Settings.FILENAME,Settings.MODE);
-        String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
-        String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
-        int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
+        //CONNEXION
 
         try {
 
-            Proto server_name = (Proto) input.readObject();
-            serverName = (String) server_name.getData().get("NAME");
+            String ip = settings.getString(Settings.IP,Settings.DEFAULT_IP);
+            int port = settings.getInt(Settings.PORT,Settings.DEFAULT_PORT);
+
+            Log.d("IP",ip);
+            Log.d("IP",port+"");
+
+            Connexion.socket = new Socket(ip, port);
+
+            Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
+            Connexion.input = new ObjectInputStream(Connexion.socket.getInputStream());
+
+            Connexion.connected = true;
+
+            // LOGIN
+
+            String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
+            String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
+            int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
+
+
+            Proto server_name = (Proto) Connexion.input.readObject();
+            Connexion.serverName = (String) server_name.getData().get("NAME");
 
             Proto logData = new Proto(Proto.LOG_DATA);
 
@@ -61,11 +71,13 @@ public class Connexion {
             logData.getData().put("NAME",name);
             logData.getData().put("ID",id);
 
-            output.writeObject(logData);
+            Connexion.output.writeObject(logData);
+            Connexion.output.flush();
 
-            Proto response = (Proto) input.readObject();
+            Proto response = (Proto) Connexion.input.readObject();
 
             if (response.getPerformative() == Proto.DENIED){
+                main.popConnexionFailedDialog();
                 return false;
             }
 
@@ -76,20 +88,29 @@ public class Connexion {
                 editor.commit();
             }
 
-            logged = true;
 
-            //Verify if ACCEPTED ?
 
+            Proto accepted = (Proto) Connexion.input.readObject();
+
+            if (accepted.getPerformative() == Proto.ACCEPTED){
+                Connexion.logged = true;
+                Proto ack = new Proto(Proto.ACK);
+                Connexion.output.writeObject(ack);
+                Connexion.output.flush();
+
+            }else {
+                main.popConnexionFailedDialog();
+                return false;
+            }
         }catch (Exception e){
             e.printStackTrace();
+            main.popConnexionFailedDialog();
             return false;
         }
+
+        main.connexionSuccesfull();
+
         return true;
-    }
-
-    public static void closeConnexion(){
 
     }
-
-
 }
