@@ -181,6 +181,7 @@ public class Client extends Thread {
         if (password == server.getServerInfo().getAdminPassword()){
             p = new Proto(Proto.ACCEPTED);
             admin = true;
+            System.out.println("Client "+getClientName()+" is now connected as admin");
         }else {
             p = new Proto(Proto.DENIED);
         }
