@@ -4,70 +4,77 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
 public class MainMenu extends AppCompatActivity {
 
+    private Handler connexionHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
         findViewById(R.id.loadingPanel).setVisibility(View.INVISIBLE);
+
+        connexionHandler = new Handler(Looper.getMainLooper()){
+
+            public void handleMessage(Message inputMessage) {
+
+                if (!Connexion.connected.get() || !Connexion.logged.get()){
+
+                    new AlertDialog.Builder(getApplicationContext())
+                            .setTitle(inputMessage.getData().getString(Connexion.TITLE))
+                            .setMessage(inputMessage.getData().getString(Connexion.MESSAGE))
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                }else {
+                    new AlertDialog.Builder(getApplicationContext())
+                            .setTitle("Connexion Successfull !!")
+                            .setMessage("Whoouuuuuuhouuuu")
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                }
+
+            }
+
+        };
     }
 
     public void connexion(View v){
-        Connect connect = new Connect();
-        connect.execute(new Object[]{this,getApplicationContext()});
-    }
 
-    public void popConnexionFailedDialog() {
+        Thread connexion = new Thread(){
 
-        hideLoadingAnimtion();
-        String error = "";
+            @Override
+            public void run() {
+                Connect connect = new Connect();
+                connect.execute(new Object[]{this,getApplicationContext()});
+            }
+        };
 
-        if(!Connexion.connected) error = "Try to change the settings and retry";
-        if(Connexion.connected && Connexion.logged) error = "Wrong password";
-
-        new AlertDialog.Builder(getApplicationContext())
-                .setTitle("Connexion Failed")
-                .setMessage(error)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
-    }
-
-    public void connexionSuccesfull(){
-
-        hideLoadingAnimtion();
-
-        new AlertDialog.Builder(getApplicationContext())
-                .setTitle("Connexion Successfull !!")
-                .setMessage("Whoouuuuuuhouuuu")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).show();
+        connexion.run();
     }
 
 
-    public void showLoadingAnimtion() {
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-    }
-
-    public void hideLoadingAnimtion() {
-        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
-    }
 
     public void settings(View v){
 
         Intent intent = new Intent(this, Settings.class);
         startActivity(intent);
 
+    }
+
+    public Handler getConnexionHandler() {
+        return connexionHandler;
     }
 }

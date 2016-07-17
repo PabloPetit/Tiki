@@ -18,6 +18,7 @@ public class Proto implements Serializable{
     public static final int SERVER_NAME = 6;
     public static final int QUIT = 7;
     public static final int SHUTDOWN = 8;
+    public static final int LOG_ADMIN_DATA = 9;
 
 
     private int performative;

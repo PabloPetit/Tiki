@@ -17,6 +17,7 @@ public class Client extends Thread {
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
+    private boolean admin;
     private boolean terminated;
 
 
@@ -26,6 +27,7 @@ public class Client extends Thread {
         this.info = null;
         this.input = null;
         this.output = null;
+        this.admin = false;
         this.terminated = false;
     }
 
@@ -137,7 +139,7 @@ public class Client extends Thread {
         server.getClients().remove(this);
 
         if (info != null){
-            System.out.println("Connexion with client ["+info.getName()+" ; "+info.getId()+" ] ended");
+            System.out.println("Connexion with client "+getClientName());
         }
         else {
             System.out.println("Connexion with anonymous client ended");
@@ -151,10 +153,52 @@ public class Client extends Thread {
 
         while (!terminated){
 
+            try {
+                Proto incoming = (Proto)input.readObject();
+
+                switch (incoming.getPerformative()){
+                    case Proto.LOG_ADMIN_DATA :
+                        checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
+                        break;
+
+                    default:
+                        System.out.println("Wrong performative received from client : "+getClientName());
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-
         terminate();
+    }
 
+    public void checkAdminPassword(String password){
+
+        Proto p;
+
+        if (password == server.getServerInfo().getAdminPassword()){
+            p = new Proto(Proto.ACCEPTED);
+            admin = true;
+        }else {
+            p = new Proto(Proto.DENIED);
+        }
+        try{
+            output.writeObject(p);
+            output.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getClientName(){
+        if (info != null){
+            return "["+info.getName()+" ; "+info.getId()+" ]";
+        }
+        else {
+            return "NOT_SET";
+        }
     }
 
 }

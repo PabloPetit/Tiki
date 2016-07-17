@@ -2,7 +2,11 @@ package com.example.pablo.tiki;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -10,6 +14,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Handler;
 
 
 /**
@@ -17,50 +23,59 @@ import java.net.Socket;
  */
 public class Connexion {
 
+    public static final String TITLE = "title";
+    public static final String MESSAGE = "message";
+
     public static Socket socket = null;
     public static ObjectInputStream input;
     public static ObjectOutputStream output;
-    public static boolean connected = false;
-    public static boolean logged = false;
     public static String serverName = "NOT_SET";
+
+
+    public static AtomicBoolean connected = new AtomicBoolean(false);
+    public static AtomicBoolean logged = new AtomicBoolean(false);
+    public static AtomicBoolean admin_logged = new AtomicBoolean(false);
+
+
 
 }
 
 class Connect extends AsyncTask{
 
 
-    @Override
-    protected Object doInBackground(Object[] params) {
+    public boolean checkInternetConnexion(MainMenu main){
+        ConnectivityManager connMgr = (ConnectivityManager)main.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-        MainMenu main = (MainMenu)params[0];
-        Context context = (Context) params[1];
-        SharedPreferences settings = context.getSharedPreferences(Settings.FILENAME,Settings.MODE);
+    public boolean connexionToServer(SharedPreferences settings){
+        String ip = settings.getString(Settings.IP,Settings.DEFAULT_IP);
+        int port = settings.getInt(Settings.PORT,Settings.DEFAULT_PORT);
 
-        main.showLoadingAnimtion();
-
-        //CONNEXION
-
-        try {
-
-            String ip = settings.getString(Settings.IP,Settings.DEFAULT_IP);
-            int port = settings.getInt(Settings.PORT,Settings.DEFAULT_PORT);
-
-            Log.d("IP",ip);
-            Log.d("IP",port+"");
-
+        try{
             Connexion.socket = new Socket(ip, port);
-
             Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
             Connexion.input = new ObjectInputStream(Connexion.socket.getInputStream());
+            Connexion.connected.set(true);
+        }catch (IOException e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
-            Connexion.connected = true;
+    public boolean simpleLoggin(SharedPreferences settings){
 
-            // LOGIN
+        String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
+        String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
+        int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
 
-            String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
-            String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
-            int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
-
+        try {
 
             Proto server_name = (Proto) Connexion.input.readObject();
             Connexion.serverName = (String) server_name.getData().get("NAME");
@@ -77,7 +92,6 @@ class Connect extends AsyncTask{
             Proto response = (Proto) Connexion.input.readObject();
 
             if (response.getPerformative() == Proto.DENIED){
-                main.popConnexionFailedDialog();
                 return false;
             }
 
@@ -88,29 +102,90 @@ class Connect extends AsyncTask{
                 editor.commit();
             }
 
-
-
             Proto accepted = (Proto) Connexion.input.readObject();
 
             if (accepted.getPerformative() == Proto.ACCEPTED){
-                Connexion.logged = true;
+                Connexion.logged.set(true);
                 Proto ack = new Proto(Proto.ACK);
                 Connexion.output.writeObject(ack);
                 Connexion.output.flush();
 
             }else {
-                main.popConnexionFailedDialog();
                 return false;
             }
         }catch (Exception e){
             e.printStackTrace();
-            main.popConnexionFailedDialog();
             return false;
         }
-
-        main.connexionSuccesfull();
-
         return true;
+    }
 
+    public boolean adminLogin(SharedPreferences settings){
+        String adminPassword = settings.getString(Settings.ADMIN_PASSWORD,Settings.DEFAULT_PASSWORD);
+
+        try{
+            Proto adminPass = new Proto(Proto.LOG_ADMIN_DATA);
+            adminPass.getData().put("ADMIN_PASSWORD",adminPassword);
+            Connexion.output.writeObject(adminPass);
+            Connexion.output.flush();
+
+            Proto response = (Proto) Connexion.input.readObject();
+
+            if (response.getPerformative() == Proto.DENIED){
+                return false;
+            }
+            else if(response.getPerformative() == Proto.ACCEPTED){
+                Connexion.admin_logged.set(true);
+                return true;
+            }
+
+
+        }catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    public void abortConnexion(MainMenu main,String title, String message){
+        Message messageHandler = main.getConnexionHandler().obtainMessage();
+        Bundle bundle = new Bundle();
+        bundle.putString(Connexion.TITLE,title);
+        bundle.putString(Connexion.MESSAGE,message);
+        messageHandler.setData(bundle);
+        messageHandler.sendToTarget();
+
+        if(Connexion.socket != null){
+            try {
+                Connexion.socket.close();
+                Connexion.socket = null;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+    @Override
+    protected Object doInBackground(Object[] params) {
+        MainMenu main = (MainMenu)params[0];
+        Context context = (Context) params[1];
+        SharedPreferences settings = context.getSharedPreferences(Settings.FILENAME,Settings.MODE);
+
+        if (!checkInternetConnexion(main)){
+            abortConnexion(main,"Connexion failed","No internet connexion");
+            return null;
+        }
+
+        if (!connexionToServer(settings)){
+            abortConnexion(main,"Connexion failed","Failed to connect to the server");
+            return null;
+        }
+
+        if (!simpleLoggin(settings)){
+            abortConnexion(main,"Connexion failed","Wrong password, change the settings and try again");
+            return null;
+        }
+        return null;
     }
 }

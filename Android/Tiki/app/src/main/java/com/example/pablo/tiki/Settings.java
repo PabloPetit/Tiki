@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 public class Settings extends AppCompatActivity {
 
     public static final String DEFAULT_NAME = "TIKI_CLIENT";
@@ -27,6 +29,7 @@ public class Settings extends AppCompatActivity {
     public static final String ID = "ID";
     public static final String PORT = "PORT";
     public static final String  PASSWORD = "PASSWORD";
+    public static final String  ADMIN_PASSWORD = "ADMIN_PASSWORD";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,7 @@ public class Settings extends AppCompatActivity {
         editor.putString(NAME,DEFAULT_NAME);
         editor.putString(IP,DEFAULT_IP);
         editor.putString(PASSWORD,DEFAULT_PASSWORD);
+        editor.putString(ADMIN_PASSWORD,DEFAULT_PASSWORD);
         editor.putInt(PORT,DEFAULT_PORT);
         editor.putInt(ID,DEFAULT_ID);
 
@@ -71,6 +75,9 @@ public class Settings extends AppCompatActivity {
         TextView pass = (TextView) findViewById(R.id.editTextPassword);
         pass.setText(settings.getString(PASSWORD,DEFAULT_PASSWORD));
 
+        TextView admin = (TextView) findViewById(R.id.editTextAdmin);
+        admin.setText(settings.getString(ADMIN_PASSWORD,DEFAULT_PASSWORD));
+
     }
 
     public void submit(View v){
@@ -79,6 +86,7 @@ public class Settings extends AppCompatActivity {
         TextView ip = (TextView) findViewById(R.id.editTextIP);
         TextView port = (TextView) findViewById(R.id.editTextPort);
         TextView pass = (TextView) findViewById(R.id.editTextPassword);
+        TextView adminPass = (TextView) findViewById(R.id.editTextAdmin);
 
         SharedPreferences settings = v.getContext().getSharedPreferences(FILENAME,MODE);
         SharedPreferences.Editor editor = settings.edit();
@@ -86,6 +94,7 @@ public class Settings extends AppCompatActivity {
         editor.putString(NAME,name.getText().toString());
         editor.putString(IP,ip.getText().toString());
         editor.putString(PASSWORD,pass.getText().toString());
+        editor.putString(ADMIN_PASSWORD,adminPass.getText().toString());
         editor.putInt(PORT,Integer.parseInt(port.getText().toString()));
 
         editor.commit();

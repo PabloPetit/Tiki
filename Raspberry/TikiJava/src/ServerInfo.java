@@ -7,16 +7,18 @@ public class ServerInfo implements Serializable{
 
     private static final String DEFAULT_NAME = "Tahuiti";
     private static final String DEFAULT_PASSWORD = "password";
-    private static final String DEFAULT_MASTER_PASS = "superPassword";
+    private static final String DEFAULT_ADMIN_PASSWORD = "superPassword";
 
     private String name;
     private String password;
+    private String adminPassword;
     private int idCount;
 
 
-    public ServerInfo(String name, String password){
+    public ServerInfo(String name, String password, String adminPassword){
         this.name = name;
         this.password = password;
+        this.adminPassword = adminPassword;
         this.idCount = 0;
     }
 
@@ -80,7 +82,7 @@ public class ServerInfo implements Serializable{
             }
         }
 
-        ServerInfo info = new ServerInfo(DEFAULT_NAME,DEFAULT_PASSWORD);
+        ServerInfo info = new ServerInfo(DEFAULT_NAME,DEFAULT_PASSWORD,DEFAULT_ADMIN_PASSWORD);
 
         info.save(path);
 
@@ -110,5 +112,9 @@ public class ServerInfo implements Serializable{
 
     public void setIdCount(int idCount) {
         this.idCount = idCount;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
     }
 }
