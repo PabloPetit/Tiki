@@ -33,6 +33,7 @@ public class ClientInfo implements Serializable {
             streamOut.close();
 
         } catch (Exception e) {
+            System.err.println("Failed to save client info in file : "+path);
             e.printStackTrace();
             return false;
         }
@@ -57,6 +58,7 @@ public class ClientInfo implements Serializable {
                     return info;
 
                 }catch (IOException e){
+                    System.err.println("Failed to find client info for id : "+id+" in file : "+path);
                     e.printStackTrace();
 
                 }catch (ClassNotFoundException e){

@@ -47,19 +47,14 @@ public class Client extends Thread {
     private boolean init(){
 
         try{
-
             output = new ObjectOutputStream(socket.getOutputStream());
             input = new ObjectInputStream(socket.getInputStream());
-
-
         }catch (IOException e){
             System.err.println("Socket unreadable");
             e.printStackTrace();
             return false;
         }
-
         return login();
-
     }
 
     private boolean login(){
@@ -84,17 +79,27 @@ public class Client extends Thread {
             id = (String)(logData.getData().get("ID"));
             name = (String)(logData.getData().get("NAME"));
 
-            if(password.equals(server.getServerInfo().getPassword())){
+            System.out.println("Log data received from client : "+getClientName()+" : \n" +
+                    "Id : "+id+"\n+" +
+                    "Name : "+"\n"+
+                    "Password : "+password+"\n");
 
+            if(password.equals(server.getServerInfo().getPassword())){
+                System.out.println("Password is correct "+getClientName());
                 //Step 3 : Match id, if new, send new id
 
                 boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
 
                 if (newIdNeeded){
+                    System.out.println("A new id is requested by client "+getClientName());
                     Proto newId = new Proto(Proto.NEW_ID);
-                    newId.getData().put("ID",server.getNewId());
+                    int clientId = server.getNewId();
+                    newId.getData().put("ID",clientId);
                     output.writeObject(newId);
                     output.flush();
+                    System.out.println("New id set for client "+getClientName()+" : "+clientId);
+                    info.setId(clientId);
+                    info.save(server.getResPath());
                 }
 
                 //Step 4 :
@@ -106,10 +111,12 @@ public class Client extends Thread {
                 Proto ack = (Proto) input.readObject();
 
                 if(ack.getPerformative() != Proto.ACK){
+                    System.err.println("Client "+getClientName()+" didn't sent ACK message");
                     return false;
                 }
 
             }else {
+                System.out.println("Wrong Password "+getClientName());
                 Proto denied = new Proto(Proto.DENIED);
                 output.writeObject(denied);
                 output.flush();
@@ -117,6 +124,7 @@ public class Client extends Thread {
             }
 
         } catch (Exception e) {
+            System.err.println("An error occured while login "+getClientName());
             e.printStackTrace();
             return false;
         }
@@ -133,6 +141,7 @@ public class Client extends Thread {
             socket.close();
             info.save(server.getResPath()); // Maybe not necessary
         } catch (IOException e) {
+            System.err.println("Failed to close socket "+getClientName());
             e.printStackTrace();
         }
 
@@ -161,6 +170,7 @@ public class Client extends Thread {
             output.writeObject(p);
             output.flush();
         } catch (IOException e) {
+            System.err.println("An error occured while login as admin "+getClientName());
             e.printStackTrace();
         }
     }
@@ -184,6 +194,8 @@ public class Client extends Thread {
             try {
 
                 Proto incoming = (Proto)input.readObject();
+
+                System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
                 switch (incoming.getPerformative()){
                     case Proto.LOG_ADMIN_DATA :
