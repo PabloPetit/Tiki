@@ -104,7 +104,7 @@ public class Client extends Thread {
         Proto logData = readProto();
 
         if(logData == null){
-            System.err.println("Clinet "+getClientName()+" did not sent login data");
+            System.err.println("Client "+getClientName()+" did not sent login data");
             return false;
         }
 

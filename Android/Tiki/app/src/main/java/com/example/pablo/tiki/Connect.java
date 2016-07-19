@@ -7,6 +7,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,27 +16,33 @@ import java.net.Socket;
 
 public class Connect extends AsyncTask {
 
+    public static String LOGD_REF = "CONNECT";
+
 
     public boolean checkInternetConnexion(MainMenu main){
+        Log.d(LOGD_REF,"Checking internet connexion");
         ConnectivityManager connMgr = (ConnectivityManager)main.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
+            Log.d(LOGD_REF,"Connected to internet");
             return true;
         } else {
+            Log.d(LOGD_REF,"No internet connexion");
             return false;
         }
     }
 
     public boolean connexionToServer(SharedPreferences settings){
+        Log.d(LOGD_REF,"Connecting to server...");
         String ip = settings.getString(Settings.IP,Settings.DEFAULT_IP);
         int port = settings.getInt(Settings.PORT,Settings.DEFAULT_PORT);
-
         try{
             Connexion.socket = new Socket(ip, port);
             Connexion.input = new ObjectInputStream(Connexion.socket.getInputStream());
             Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
             Connexion.connected.set(true);
         }catch (IOException e){
+            Log.d(LOGD_REF,"Could not open socket");
             e.printStackTrace();
             return false;
         }
@@ -43,51 +50,58 @@ public class Connect extends AsyncTask {
     }
 
     public boolean simpleLoggin(SharedPreferences settings){
+        Log.d(LOGD_REF,"Trying to log on server...");
 
         String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
         String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
         int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
 
-        try {
 
-            Proto server_name = (Proto) Connexion.input.readObject();
-            Connexion.serverName = (String) server_name.getData().get("NAME");
+        Proto server_name = readProto();
+        if (server_name == null){
+            Log.d(LOGD_REF,"Server name not received");
+            return false;
+        }
+        Connexion.serverName = (String) server_name.getData().get("NAME");
+        Log.d(LOGD_REF,"Server name received : "+Connexion.serverName);
+        Log.d(LOGD_REF,"Sending log data");
+        Proto logData = new Proto(Proto.LOG_DATA);
 
-            Proto logData = new Proto(Proto.LOG_DATA);
+        logData.getData().put("PASS",password);
+        logData.getData().put("NAME",name);
+        logData.getData().put("ID",id);
 
-            logData.getData().put("PASS",password);
-            logData.getData().put("NAME",name);
-            logData.getData().put("ID",id);
+        sendProto(logData);
 
-            Connexion.output.writeObject(logData);
-            Connexion.output.flush();
+        Proto response = readProto();
 
-            Proto response = (Proto) Connexion.input.readObject();
+        if (response == null || response.getPerformative() == Proto.DENIED){
+            Log.d(LOGD_REF,(response == null)?"No response":"Server denied login");
+            return false;
+        }
+        else if (response.getPerformative() == Proto.ACCEPTED){
+            Connexion.logged.set(true);
+            Proto ack = new Proto(Proto.ACK);
+            sendProto(ack);
+        }
+        else if (response.getPerformative() == Proto.NEW_ID){
+            Log.d(LOGD_REF,"New id received : "+(Integer)response.getData().get("ID"));
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt(Settings.ID, (Integer) response.getData().get("ID"));
+            editor.commit();
 
-            if (response.getPerformative() == Proto.DENIED){
-                return false;
-            }
+            Proto accepted = readProto();
 
-            else if (response.getPerformative() == Proto.NEW_ID){
-                // Set and save the new id
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putInt(Settings.ID, (Integer) response.getData().get("ID"));
-                editor.commit();
-            }
-
-            Proto accepted = (Proto) Connexion.input.readObject();
-
-            if (accepted.getPerformative() == Proto.ACCEPTED){
+            if (accepted != null && accepted.getPerformative() == Proto.ACCEPTED){
                 Connexion.logged.set(true);
                 Proto ack = new Proto(Proto.ACK);
-                Connexion.output.writeObject(ack);
-                Connexion.output.flush();
-
+                sendProto(ack);
             }else {
+                Log.d(LOGD_REF,(accepted == null)?"ACCEPTED not received":"Wrong performative, ACCEPTED expected [1]");
                 return false;
             }
-        }catch (Exception e){
-            e.printStackTrace();
+        }else {
+            Log.d(LOGD_REF,"Wrong performative, ACCEPTED expected [2]");
             return false;
         }
         return true;
@@ -95,26 +109,17 @@ public class Connect extends AsyncTask {
 
     public boolean adminLogin(SharedPreferences settings){
         String adminPassword = settings.getString(Settings.ADMIN_PASSWORD,Settings.DEFAULT_PASSWORD);
+        Proto adminPass = new Proto(Proto.LOG_ADMIN_DATA);
+        adminPass.getData().put("ADMIN_PASSWORD",adminPassword);
+        sendProto(adminPass);
 
-        try{
-            Proto adminPass = new Proto(Proto.LOG_ADMIN_DATA);
-            adminPass.getData().put("ADMIN_PASSWORD",adminPassword);
-            Connexion.output.writeObject(adminPass);
-            Connexion.output.flush();
+        Proto response = readProto();
 
-            Proto response = (Proto) Connexion.input.readObject();
-
-            if (response.getPerformative() == Proto.DENIED){
-                return false;
-            }
-            else if(response.getPerformative() == Proto.ACCEPTED){
-                Connexion.admin_logged.set(true);
-                return true;
-            }
-
-
-        }catch (Exception e) {
+        if (response == null || response.getPerformative() == Proto.DENIED){
             return false;
+        }
+        else if(response.getPerformative() == Proto.ACCEPTED){
+            Connexion.admin_logged.set(true);
         }
         return true;
     }
@@ -129,12 +134,44 @@ public class Connect extends AsyncTask {
 
         if(Connexion.socket != null){
             try {
+                Connexion.input.close();
+                Connexion.output.close();
                 Connexion.socket.close();
                 Connexion.socket = null;
+                Connexion.input = null;
+                Connexion.output = null;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Proto readProto(){
+        Proto p = null;
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < Connexion.TIMEOUT){
+            try {
+                if (Connexion.input.available() > 0){
+                    p = (Proto)Connexion.input.readObject();
+                }else {
+                    Thread.sleep(Connexion.LITTLE_SLEEP);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return p;
+    }
+
+    public boolean sendProto(Proto p){
+        try {
+            Connexion.output.writeObject(p);
+            Connexion.output.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
@@ -159,6 +196,7 @@ public class Connect extends AsyncTask {
             abortConnexion(main,"Connexion failed","Wrong password, change the settings and try again");
             return null;
         }
+        adminLogin(settings);
         return null;
     }
 }

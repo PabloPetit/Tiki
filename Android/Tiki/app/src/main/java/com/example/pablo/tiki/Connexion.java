@@ -25,6 +25,8 @@ public class Connexion {
 
     public static final String TITLE = "title";
     public static final String MESSAGE = "message";
+    public static final int TIMEOUT = 3000;
+    public static final int LITTLE_SLEEP = 50;
 
     public static Socket socket = null;
     public static ObjectInputStream input;
