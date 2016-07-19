@@ -73,6 +73,8 @@ public class Client extends Thread {
 
             //Step 2 : received log info and check password
 
+            System.out.println("Available : "+input.available());
+
             Proto logData = (Proto)input.readObject();
 
             password = (String)(logData.getData().get("PASS"));
@@ -192,6 +194,14 @@ public class Client extends Thread {
         while (!terminated){
 
             try {
+
+                if (input.available() == 0){
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e1) {
+                        e1.printStackTrace();
+                    }
+                }
 
                 Proto incoming = (Proto)input.readObject();
 
