@@ -139,7 +139,6 @@ public class Client extends Thread {
             input.close();
             output.close();
             socket.close();
-            info.save(server.getResPath()); // Maybe not necessary
         } catch (IOException e) {
             System.err.println("Failed to close socket "+getClientName());
             e.printStackTrace();
@@ -148,7 +147,8 @@ public class Client extends Thread {
         server.getClients().remove(this);
 
         if (info != null){
-            System.out.println("Connexion with client "+getClientName());
+            System.out.println("Connexion with client "+getClientName()" ended");
+            info.save(server.getResPath());
         }
         else {
             System.out.println("Connexion with anonymous client ended");
