@@ -32,8 +32,8 @@ public class Connect extends AsyncTask {
 
         try{
             Connexion.socket = new Socket(ip, port);
-            Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
             Connexion.input = new ObjectInputStream(Connexion.socket.getInputStream());
+            Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
             Connexion.connected.set(true);
         }catch (IOException e){
             e.printStackTrace();

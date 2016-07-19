@@ -195,10 +195,17 @@ public class Client extends Thread {
                         break;
                 }
             } catch (IOException e) {
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-            } 
+            }
         }
         terminate();
     }
