@@ -10,6 +10,10 @@ public class Client extends Thread {
     private static String DEFAULT_NAME = "NO_NAME";
     private static String DEFAULT_ID = "-1";
     private static String DEFAULT_PASSWORD = "";
+    public static int TIMEOUT = 3000;
+    public static int LITTLE_SLEEP = 50;
+    public static int BIG_SLEEP = 1000;
+
 
     private Server server;
     private Socket socket;
@@ -57,80 +61,93 @@ public class Client extends Thread {
         return login();
     }
 
+    public Proto readProto(){
+        Proto p = null;
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < TIMEOUT){
+            try {
+                if (input.available() > 0){
+                    p = (Proto)input.readObject();
+                }else {
+                    Thread.sleep(LITTLE_SLEEP);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return p;
+    }
+
+    public boolean sendProto(Proto p){
+        try {
+            output.writeObject(p);
+            output.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private boolean login(){
         String id = DEFAULT_ID;
         String name = DEFAULT_NAME;
         String password = DEFAULT_PASSWORD;
 
-        try {
 
-            //Step 1 : send the server name
-            Proto server_name = new Proto(Proto.SERVER_NAME);
-            server_name.getData().put("NAME",server.getServerInfo().getName());
+        //Step 1 : send the server name
+        Proto server_name = new Proto(Proto.SERVER_NAME);
+        server_name.getData().put("NAME",server.getServerInfo().getName());
+        sendProto(server_name);
 
-            output.writeObject(server_name);
-            output.flush();
+        //Step 2 : received log info and check password
+        Proto logData = readProto();
 
-            //Step 2 : received log info and check password
-
-            System.out.println("Available : "+input.available());
-
-            Proto logData = (Proto)input.readObject();
-
-            password = (String)(logData.getData().get("PASS"));
-            id = (String)(logData.getData().get("ID"));
-            name = (String)(logData.getData().get("NAME"));
-
-            System.out.println("Log data received from client : "+getClientName()+" : \n" +
-                    "Id : "+id+"\n+" +
-                    "Name : "+"\n"+
-                    "Password : "+password+"\n");
-
-            if(password.equals(server.getServerInfo().getPassword())){
-                System.out.println("Password is correct "+getClientName());
-                //Step 3 : Match id, if new, send new id
-
-                boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
-
-                if (newIdNeeded){
-                    System.out.println("A new id is requested by client "+getClientName());
-                    Proto newId = new Proto(Proto.NEW_ID);
-                    int clientId = server.getNewId();
-                    newId.getData().put("ID",clientId);
-                    output.writeObject(newId);
-                    output.flush();
-                    System.out.println("New id set for client "+getClientName()+" : "+clientId);
-                    info.setId(clientId);
-                    info.save(server.getResPath());
-                }
-
-                //Step 4 :
-
-                Proto accepted = new Proto(Proto.ACCEPTED);
-                output.writeObject(accepted);
-                output.flush();
-
-                Proto ack = (Proto) input.readObject();
-
-                if(ack.getPerformative() != Proto.ACK){
-                    System.err.println("Client "+getClientName()+" didn't sent ACK message");
-                    return false;
-                }
-
-            }else {
-                System.out.println("Wrong Password "+getClientName());
-                Proto denied = new Proto(Proto.DENIED);
-                output.writeObject(denied);
-                output.flush();
-                return false;
-            }
-
-        } catch (Exception e) {
-            System.err.println("An error occured while login "+getClientName());
-            e.printStackTrace();
+        if(logData == null){
+            System.err.println("Clinet "+getClientName()+" did not sent login data");
             return false;
         }
 
+        password = (String)(logData.getData().get("PASS"));
+        id = (String)(logData.getData().get("ID"));
+        name = (String)(logData.getData().get("NAME"));
+
+        System.out.println("Log data received from client : "+getClientName()+" : \n" +
+                "Id : "+id+"\n+" +
+                "Name : "+"\n"+
+                "Password : "+password+"\n");
+        // Checking the password
+        if(password.equals(server.getServerInfo().getPassword())){
+            System.out.println("Password is correct "+getClientName());
+            //Step 3 : Match id, if new, send new id
+            boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
+            if (newIdNeeded){
+                System.out.println("A new id is requested by client "+getClientName());
+                Proto newId = new Proto(Proto.NEW_ID);
+                int clientId = server.getNewId();
+                newId.getData().put("ID",clientId);
+                sendProto(newId);
+                System.out.println("New id set for client "+getClientName()+" : "+clientId);
+                info.setId(clientId);
+                info.save(server.getResPath());
+            }
+
+            //Step 4 :
+
+            Proto accepted = new Proto(Proto.ACCEPTED);
+            sendProto(accepted);
+
+            Proto ack = readProto();
+            if(ack == null || ack.getPerformative() != Proto.ACK){
+                System.err.println("Client "+getClientName()+" didn't sent ACK message");
+                return false;
+            }
+        }else {
+            System.out.println("Wrong Password "+getClientName());
+            Proto denied = new Proto(Proto.DENIED);
+            sendProto(denied);
+            return false;
+        }
         return true;
     }
 
@@ -189,48 +206,42 @@ public class Client extends Thread {
     @Override
     public void run(){
 
-        terminated = !init();
+        if(!init()){
+            System.err.println("An error occured while login "+getClientName());
+            terminated = true;
+        }
 
         while (!terminated){
 
-            try {
-
-                if (input.available() == 0){
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-
-                Proto incoming = (Proto)input.readObject();
-
-                System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
-
-                switch (incoming.getPerformative()){
-                    case Proto.LOG_ADMIN_DATA :
-                        checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
-                        break;
-
-                    default:
-                        System.out.println("Wrong performative received from client : "+getClientName());
-                        break;
-                }
-            } catch (IOException e) {
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+            if (socket.isClosed() || !socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown()){
+                terminated = true;
+                break;
             }
+
+            Proto incoming = readProto();
+
+            if(incoming == null){
+                try {
+                    Thread.sleep(LITTLE_SLEEP);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
+
+            switch (incoming.getPerformative()){
+                case Proto.LOG_ADMIN_DATA :
+                    checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
+                    break;
+
+                default:
+                    System.out.println("Wrong performative received from client : "+getClientName());
+                    break;
+            }
+
         }
         terminate();
     }
-
 
 }
