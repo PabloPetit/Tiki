@@ -147,7 +147,7 @@ public class Client extends Thread {
         server.getClients().remove(this);
 
         if (info != null){
-            System.out.println("Connexion with client "+getClientName()" ended");
+            System.out.println("Connexion with client "+getClientName()+" ended");
             info.save(server.getResPath());
         }
         else {
