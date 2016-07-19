@@ -146,34 +146,6 @@ public class Client extends Thread {
         }
     }
 
-    @Override
-    public void run(){
-
-        terminated = init();
-
-        while (!terminated){
-
-            try {
-                Proto incoming = (Proto)input.readObject();
-
-                switch (incoming.getPerformative()){
-                    case Proto.LOG_ADMIN_DATA :
-                        checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
-                        break;
-
-                    default:
-                        System.out.println("Wrong performative received from client : "+getClientName());
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        terminate();
-    }
-
     public void checkAdminPassword(String password){
 
         Proto p;
@@ -201,5 +173,39 @@ public class Client extends Thread {
             return "NOT_SET";
         }
     }
+
+    @Override
+    public void run(){
+
+        terminated = init();
+
+        while (!terminated){
+
+            try {
+
+                Thread.sleep(500);
+
+                Proto incoming = (Proto)input.readObject();
+
+                switch (incoming.getPerformative()){
+                    case Proto.LOG_ADMIN_DATA :
+                        checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
+                        break;
+
+                    default:
+                        System.out.println("Wrong performative received from client : "+getClientName());
+                        break;
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        terminate();
+    }
+
 
 }

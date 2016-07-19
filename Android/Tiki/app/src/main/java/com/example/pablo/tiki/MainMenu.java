@@ -26,43 +26,32 @@ public class MainMenu extends AppCompatActivity {
             public void handleMessage(Message inputMessage) {
 
                 if (!Connexion.connected.get() || !Connexion.logged.get()){
-
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle(inputMessage.getData().getString(Connexion.TITLE))
-                            .setMessage(inputMessage.getData().getString(Connexion.MESSAGE))
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).show();
+                    showPopUp(inputMessage.getData().getString(Connexion.TITLE),
+                            inputMessage.getData().getString(Connexion.MESSAGE));
                 }else {
-                    new AlertDialog.Builder(getApplicationContext())
-                            .setTitle("Connexion Successfull !!")
-                            .setMessage("Whoouuuuuuhouuuu")
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).show();
+                    showPopUp(inputMessage.getData().getString("All ok"),
+                            inputMessage.getData().getString("All right"));
                 }
-
             }
-
         };
+    }
+
+    public void showPopUp(String title, String message){
+        new AlertDialog.Builder(MainMenu.this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).show();
     }
 
     public void connexion(View v){
 
-        Thread connexion = new Thread(){
+        Connect connect = new Connect();
+        connect.execute(new Object[]{this,getApplicationContext()});
 
-            @Override
-            public void run() {
-                Connect connect = new Connect();
-                connect.execute(new Object[]{this,getApplicationContext()});
-            }
-        };
-
-        connexion.run();
     }
 
 
