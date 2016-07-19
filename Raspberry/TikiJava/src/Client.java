@@ -187,7 +187,7 @@ public class Client extends Thread {
     @Override
     public void run(){
 
-        terminated = init();
+        terminated = !init();
 
         while (!terminated){
 
