@@ -183,8 +183,6 @@ public class Client extends Thread {
 
             try {
 
-                Thread.sleep(500);
-
                 Proto incoming = (Proto)input.readObject();
 
                 switch (incoming.getPerformative()){
@@ -200,9 +198,7 @@ public class Client extends Thread {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } 
         }
         terminate();
     }
