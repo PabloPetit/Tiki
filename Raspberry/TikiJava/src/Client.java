@@ -64,6 +64,7 @@ public class Client extends Thread {
     public Proto readProto(){
         Proto p = null;
         long start = System.currentTimeMillis();
+
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
                 if (input.available() > 0){

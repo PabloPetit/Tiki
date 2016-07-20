@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class Connect extends AsyncTask {
 
     public static String LOG_TAG = "CONNECT";
-    public static AtomicBoolean runnig = new AtomicBoolean(false);
+    public static AtomicBoolean running = new AtomicBoolean(false);
 
 
     public boolean checkInternetConnexion(MainMenu main){
@@ -146,6 +146,7 @@ public class Connect extends AsyncTask {
                 e.printStackTrace();
             }
         }
+        running.set(false);
     }
 
     public Proto readProto(){
@@ -181,10 +182,11 @@ public class Connect extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
 
-        runnig.set(true);
-        if (runnig.get()){
+        if (running.get()){
+            Log.d(LOG_TAG,"Connect:doInBackgroung is already running");
             return null;
         }
+        running.set(true);
 
         MainMenu main = (MainMenu)params[0];
         Context context = (Context) params[1];
@@ -194,23 +196,19 @@ public class Connect extends AsyncTask {
 
         if (!checkInternetConnexion(main)){
             abortConnexion(main,"Connexion failed","No internet connexion");
-            runnig.set(false);
             return null;
         }
 
         if (!connexionToServer(settings)){
             abortConnexion(main,"Connexion failed","Failed to connect to the server");
-            runnig.set(false);
             return null;
         }
 
         if (!simpleLoggin(settings)){
             abortConnexion(main,"Connexion failed","Wrong password, change the settings and try again");
-            runnig.set(false);
             return null;
         }
         adminLogin(settings);
-        runnig.set(false);
         return null;
     }
 }
