@@ -13,6 +13,12 @@ import android.view.View;
 
 public class MainMenu extends AppCompatActivity {
 
+    public static final String CONNEXION_FAILED = "Connexion failed";
+    public static final String NO_INTERNET = "No internet connexion";
+    public static final String WRONG_PASSWORD = "Wrong password, change the settings and try again";
+    public static final String FAILED_CONNECT_SERVER = "Failed to connect to the server";
+    public static final String ERROR = "An error as occured";
+
     private Handler connexionHandler;
 
     @Override

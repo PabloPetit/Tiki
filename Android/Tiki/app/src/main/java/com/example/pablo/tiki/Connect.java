@@ -154,6 +154,7 @@ public class Connect extends AsyncTask {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < Connexion.TIMEOUT){
             try {
+                Log.d(LOG_TAG,"Available : "+Connexion.input.available());
                 if (Connexion.input.available() > 0){
                     p = (Proto)Connexion.input.readObject();
                 }else {
@@ -195,17 +196,17 @@ public class Connect extends AsyncTask {
         Log.d(LOG_TAG,"Connect:doInBackgroung");
 
         if (!checkInternetConnexion(main)){
-            abortConnexion(main,"Connexion failed","No internet connexion");
+            abortConnexion(main,MainMenu.CONNEXION_FAILED,MainMenu.NO_INTERNET);
             return null;
         }
 
         if (!connexionToServer(settings)){
-            abortConnexion(main,"Connexion failed","Failed to connect to the server");
+            abortConnexion(main,MainMenu.CONNEXION_FAILED,MainMenu.FAILED_CONNECT_SERVER);
             return null;
         }
 
         if (!simpleLoggin(settings)){
-            abortConnexion(main,"Connexion failed","Wrong password, change the settings and try again");
+            abortConnexion(main,MainMenu.CONNEXION_FAILED,MainMenu.WRONG_PASSWORD);
             return null;
         }
         adminLogin(settings);
