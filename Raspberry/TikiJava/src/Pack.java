@@ -33,7 +33,7 @@ public class Pack implements Serializable {
 
     public Pack(int performative) {
         this.performative = performative;
-        this.data = new HashMap();
+        this.data = new HashMap<String, Object>();
     }
 
     public Pack(int performative, HashMap<String, Object> data) {

@@ -49,6 +49,7 @@ public class Client extends Thread {
 
         try{
             output = new ObjectOutputStream(socket.getOutputStream());
+            output.flush();
             input = new ObjectInputStream(socket.getInputStream());
         }catch (IOException e){
             System.err.println("Socket unreadable");

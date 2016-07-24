@@ -1,5 +1,7 @@
 package com.example.pablo.tiki;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -56,6 +58,8 @@ public class Pack implements Serializable {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
+
+                Log.d(Connect.LOG_TAG,input.available()+"");
                 if (input.available() > 0){
                     int performative = ((Integer)input.readObject()) .intValue();
                     HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
