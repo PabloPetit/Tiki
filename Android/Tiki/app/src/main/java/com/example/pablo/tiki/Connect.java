@@ -41,6 +41,7 @@ public class Connect extends AsyncTask {
             Connexion.socket = new Socket(ip, port);
             Connexion.input = new ObjectInputStream(Connexion.socket.getInputStream());
             Connexion.output = new ObjectOutputStream(Connexion.socket.getOutputStream());
+            Connexion.output.flush();
             Connexion.connected.set(true);
         }catch (IOException e){
             Log.d(LOG_TAG,"Could not open socket");

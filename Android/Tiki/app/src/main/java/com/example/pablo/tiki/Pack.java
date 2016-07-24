@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class Pack implements Serializable {
 
-    public static final int TIMEOUT = 1000;
+    public static final int TIMEOUT = 5000;
     public static final int LITTLE_SLEEP = 50;
 
 
