@@ -37,7 +37,7 @@ public class Pack implements Serializable {
 
     public Pack(int performative) {
         this.performative = performative;
-        this.data = new HashMap();
+        this.data = new HashMap<String, Object>();
     }
 
     public Pack(int performative, HashMap<String, Object> data) {
@@ -58,8 +58,6 @@ public class Pack implements Serializable {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
-
-                Log.d(Connect.LOG_TAG,input.available()+"");
                 if (input.available() > 0){
                     int performative = ((Integer)input.readObject()) .intValue();
                     HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
@@ -78,8 +76,10 @@ public class Pack implements Serializable {
 
     public static boolean sendPack(Pack p, ObjectOutputStream output){
         try {
+            output.reset();
             output.writeObject(new Integer(p.getPerformative()));
             output.flush();
+            output.reset();
             output.writeObject(p.getData());
             output.flush();
             return true;

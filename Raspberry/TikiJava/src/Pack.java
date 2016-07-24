@@ -72,8 +72,10 @@ public class Pack implements Serializable {
 
     public static boolean sendPack(Pack p, ObjectOutputStream output){
         try {
+            output.reset();
             output.writeObject(new Integer(p.getPerformative()));
             output.flush();
+            output.reset();
             output.writeObject(p.getData());
             output.flush();
             return true;
