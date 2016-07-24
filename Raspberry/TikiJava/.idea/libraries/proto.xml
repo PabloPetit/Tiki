@@ -2,8 +2,6 @@
   <library name="proto">
     <CLASSES />
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../Jar/proto.jar!/" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>

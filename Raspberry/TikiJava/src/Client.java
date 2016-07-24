@@ -10,9 +10,6 @@ public class Client extends Thread {
     private static String DEFAULT_NAME = "NO_NAME";
     private static String DEFAULT_ID = "-1";
     private static String DEFAULT_PASSWORD = "";
-    public static int TIMEOUT = 3000;
-    public static int LITTLE_SLEEP = 50;
-    public static int BIG_SLEEP = 1000;
 
 
     private Server server;
@@ -60,35 +57,9 @@ public class Client extends Thread {
         }
         return login();
     }
+    
 
-    public Proto readProto(){
-        Proto p = null;
-        long start = System.currentTimeMillis();
-
-        while (System.currentTimeMillis() - start < TIMEOUT){
-            try {
-                if (input.available() > 0){
-                    p = (Proto)input.readObject();
-                }else {
-                    Thread.sleep(LITTLE_SLEEP);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return p;
-    }
-
-    public boolean sendProto(Proto p){
-        try {
-            output.writeObject(p);
-            output.flush();
-            return true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+    
 
     private boolean login(){
         String id = DEFAULT_ID;
@@ -97,12 +68,12 @@ public class Client extends Thread {
 
 
         //Step 1 : send the server name
-        Proto server_name = new Proto(Proto.SERVER_NAME);
+        Pack server_name = new Pack(Pack.SERVER_NAME);
         server_name.getData().put("NAME",server.getServerInfo().getName());
-        sendProto(server_name);
+        Pack.sendPack(server_name,output);
 
         //Step 2 : received log info and check password
-        Proto logData = readProto();
+        Pack logData = Pack.readPack(input);
 
         if(logData == null){
             System.err.println("Client "+getClientName()+" did not sent login data");
@@ -124,10 +95,10 @@ public class Client extends Thread {
             boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
             if (newIdNeeded){
                 System.out.println("A new id is requested by client "+getClientName());
-                Proto newId = new Proto(Proto.NEW_ID);
+                Pack newId = new Pack(Pack.NEW_ID);
                 int clientId = server.getNewId();
                 newId.getData().put("ID",clientId);
-                sendProto(newId);
+                Pack.sendPack(newId,output);
                 System.out.println("New id set for client "+getClientName()+" : "+clientId);
                 info.setId(clientId);
                 info.save(server.getResPath());
@@ -135,18 +106,18 @@ public class Client extends Thread {
 
             //Step 4 :
 
-            Proto accepted = new Proto(Proto.ACCEPTED);
-            sendProto(accepted);
+            Pack accepted = new Pack(Pack.ACCEPTED);
+            Pack.sendPack(accepted,output);
 
-            Proto ack = readProto();
-            if(ack == null || ack.getPerformative() != Proto.ACK){
+            Pack ack = Pack.readPack(input);
+            if(ack == null || ack.getPerformative() != Pack.ACK){
                 System.err.println("Client "+getClientName()+" didn't sent ACK message");
                 return false;
             }
         }else {
             System.out.println("Wrong Password "+getClientName());
-            Proto denied = new Proto(Proto.DENIED);
-            sendProto(denied);
+            Pack denied = new Pack(Pack.DENIED);
+            Pack.sendPack(denied,output);
             return false;
         }
         return true;
@@ -177,14 +148,14 @@ public class Client extends Thread {
 
     public void checkAdminPassword(String password){
 
-        Proto p;
+        Pack p;
 
         if (password == server.getServerInfo().getAdminPassword()){
-            p = new Proto(Proto.ACCEPTED);
+            p = new Pack(Pack.ACCEPTED);
             admin = true;
             System.out.println("Client "+getClientName()+" is now connected as admin");
         }else {
-            p = new Proto(Proto.DENIED);
+            p = new Pack(Pack.DENIED);
         }
         try{
             output.writeObject(p);
@@ -219,11 +190,11 @@ public class Client extends Thread {
                 break;
             }
 
-            Proto incoming = readProto();
+            Pack incoming = Pack.readPack(input);
 
             if(incoming == null){
                 try {
-                    Thread.sleep(LITTLE_SLEEP);
+                    Thread.sleep(Pack.LITTLE_SLEEP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -232,7 +203,7 @@ public class Client extends Thread {
             System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
             switch (incoming.getPerformative()){
-                case Proto.LOG_ADMIN_DATA :
+                case Pack.LOG_ADMIN_DATA :
                     checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
                     break;
 
