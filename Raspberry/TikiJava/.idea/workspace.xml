@@ -25,7 +25,7 @@
       <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Client.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2940">
+            <state relative-caret-position="2274">
               <caret line="196" column="50" selection-start-line="196" selection-start-column="50" selection-end-line="196" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -37,8 +37,8 @@
       <file leaf-file-name="Pack.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Pack.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="51" column="31" selection-start-line="0" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+            <state relative-caret-position="570">
+              <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -118,8 +118,8 @@
         <option value="$PROJECT_DIR$/src/Proto.java" />
         <option value="$PROJECT_DIR$/src/ClientInfo.java" />
         <option value="$PROJECT_DIR$/src/ServerInfo.java" />
-        <option value="$PROJECT_DIR$/src/Pack.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/Pack.java" />
       </list>
     </option>
   </component>
@@ -717,7 +717,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2940">
+        <state relative-caret-position="2274">
           <caret line="196" column="50" selection-start-line="196" selection-start-column="50" selection-end-line="196" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -727,8 +727,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Pack.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="51" column="31" selection-start-line="0" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
+        <state relative-caret-position="570">
+          <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

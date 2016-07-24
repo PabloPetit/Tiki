@@ -58,6 +58,7 @@ public class Pack implements Serializable {
                     int performative = ((Integer)input.readObject()) .intValue();
                     HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
                     p = new Pack(performative,data);
+                    break;
                 }else {
                     Thread.sleep(LITTLE_SLEEP);
                 }
