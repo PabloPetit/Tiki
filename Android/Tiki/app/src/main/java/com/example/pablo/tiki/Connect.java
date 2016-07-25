@@ -180,6 +180,7 @@ public class Connect extends AsyncTask {
             return null;
         }
         adminLogin(settings);
+        running.set(false);
         return null;
     }
 }

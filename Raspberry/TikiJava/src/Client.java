@@ -151,12 +151,15 @@ public class Client extends Thread {
 
         Pack p;
 
+        System.out.println("Client "+getClientName()+" is trying to log as admin");
+
         if (password == server.getServerInfo().getAdminPassword()){
             p = new Pack(Pack.ACCEPTED);
             admin = true;
             System.out.println("Client "+getClientName()+" is now connected as admin");
         }else {
             p = new Pack(Pack.DENIED);
+            System.out.println("Admin login denied for client "+getClientName());
         }
 
         Pack.sendPack(p,output);
