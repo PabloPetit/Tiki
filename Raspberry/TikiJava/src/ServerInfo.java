@@ -5,6 +5,8 @@ import java.io.*;
  */
 public class ServerInfo implements Serializable{
 
+
+
     private static final String DEFAULT_NAME = "Tahuiti";
     private static final String DEFAULT_PASSWORD = "password";
     private static final String DEFAULT_ADMIN_PASSWORD = "superPassword";
@@ -19,7 +21,7 @@ public class ServerInfo implements Serializable{
         this.name = name;
         this.password = password;
         this.adminPassword = adminPassword;
-        this.idCount = 0;
+        this.idCount = 1;
     }
 
     public boolean save(String path){
@@ -49,6 +51,8 @@ public class ServerInfo implements Serializable{
 
     public static ServerInfo findServerInfo(String path) {
 
+        System.out.println("Looking for server info ...");
+
         File root = new File(path);
 
         if (root==null){
@@ -69,6 +73,8 @@ public class ServerInfo implements Serializable{
                     objectinputstream.close();
                     streamIn.close();
 
+                    System.out.println("Server info found");
+
                     return info;
 
                 } catch (IOException e) {
@@ -81,6 +87,8 @@ public class ServerInfo implements Serializable{
                 }
             }
         }
+
+        System.out.println("Server info not found, creating new one");
 
         ServerInfo info = new ServerInfo(DEFAULT_NAME,DEFAULT_PASSWORD,DEFAULT_ADMIN_PASSWORD);
 

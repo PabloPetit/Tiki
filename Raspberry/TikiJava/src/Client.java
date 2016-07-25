@@ -1,6 +1,5 @@
 import java.io.*;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -87,23 +86,43 @@ public class Client extends Thread {
         name = (String)(logData.getData().get("NAME"));
 
         System.out.println("Log data received from client : "+getClientName()+"\n" +
-                "Id : "+id+"\n+" +
+                "Id : "+id+"\n" +
                 "Name : "+name+"\n"+
                 "Password : "+password+"\n");
         // Checking the password
         if(password.equals(server.getServerInfo().getPassword())){
             System.out.println("Password is correct "+getClientName());
             //Step 3 : Match id, if new, send new id
-            boolean newIdNeeded = setClientInfo(id,name,server.getResPath());
+            System.out.println("Looking for client info ...");
+
+            boolean newIdNeeded = !setClientInfo(id,name,server.getResPath());
+
             if (newIdNeeded){
                 System.out.println("A new id is requested by client "+getClientName());
                 Pack newId = new Pack(Pack.NEW_ID);
                 int clientId = server.getNewId();
                 newId.getData().put("ID",clientId);
                 Pack.sendPack(newId,output);
+
+                System.out.println("New id sent to client "+getClientName());
+                System.out.println("Waiting fo acknolegde");
+
+                Pack p = Pack.readPack(input);
+
+                if(p == null || p.getPerformative() != Pack.ACK){
+                    System.out.println((p==null)?"ACK not received":"Wrong performative");
+                }
+
                 System.out.println("New id set for client "+getClientName()+" : "+clientId);
                 info.setId(clientId);
                 info.save(server.getResPath());
+
+
+            }else{
+                System.out.println("Info found : \n" +
+                        "Id : "+info.getId()+"\n" +
+                        "Name : "+info.getName()+"\n" +
+                        "Connexions : "+info.getNbConnexions());
             }
 
             //Step 4 :

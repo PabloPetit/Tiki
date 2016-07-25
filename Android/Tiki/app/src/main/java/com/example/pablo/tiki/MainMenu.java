@@ -66,6 +66,12 @@ public class MainMenu extends AppCompatActivity {
         super.onStop();
     }
 
+    @Override
+    protected void onDestroy() {
+        Connect.closeConnexion();
+        super.onDestroy();
+    }
+
     public void settings(View v){
 
         Intent intent = new Intent(this, Settings.class);

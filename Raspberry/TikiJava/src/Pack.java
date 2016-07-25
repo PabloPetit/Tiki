@@ -62,9 +62,11 @@ public class Pack{
                     Thread.sleep(LITTLE_SLEEP);
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
+                    break;
                 }
             } catch (Exception e){
                 e.printStackTrace();
+                break;
             }
         }
         return p;

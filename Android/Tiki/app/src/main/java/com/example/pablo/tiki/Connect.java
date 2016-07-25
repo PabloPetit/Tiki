@@ -66,6 +66,7 @@ public class Connect extends AsyncTask {
 
 
         Pack server_name = Pack.readPack(Connexion.input);
+
         if (server_name == null){
             Log.d(LOG_TAG,"Server name not received");
             return false;
@@ -98,6 +99,11 @@ public class Connect extends AsyncTask {
             SharedPreferences.Editor editor = settings.edit();
             editor.putInt(Settings.ID, (Integer) response.getData().get("ID"));
             editor.commit();
+
+            Log.d(LOG_TAG,"Sending ack");
+
+            Pack.sendPack(new Pack(Pack.ACK),Connexion.output);
+
 
             Pack accepted = Pack.readPack(Connexion.input);
 
