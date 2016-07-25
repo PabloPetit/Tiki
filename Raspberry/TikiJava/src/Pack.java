@@ -1,10 +1,7 @@
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.HashMap;
 
-public class Pack implements Serializable {
+public class Pack{
 
     public static final int TIMEOUT = 5000;
     public static final int LITTLE_SLEEP = 50;
@@ -54,15 +51,19 @@ public class Pack implements Serializable {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
-                if (input.available() > 0 || true){
-                    int performative = ((Integer)input.readObject()) .intValue();
-                    HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
-                    p = new Pack(performative,data);
-                    break;
-                }else {
+
+                int performative = ((Integer)input.readObject()) .intValue();
+                HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
+                p = new Pack(performative,data);
+                break;
+
+            } catch (EOFException e) {
+                try {
                     Thread.sleep(LITTLE_SLEEP);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
                 }
-            } catch (Exception e) {
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }

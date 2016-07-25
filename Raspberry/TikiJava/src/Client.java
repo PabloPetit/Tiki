@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class Client extends Thread {
 
     private static String DEFAULT_NAME = "NO_NAME";
-    private static String DEFAULT_ID = "-1";
+    private static int DEFAULT_ID = -1;
     private static String DEFAULT_PASSWORD = "";
 
 
@@ -32,7 +32,7 @@ public class Client extends Thread {
         this.terminated = false;
     }
 
-    private boolean setClientInfo(String id, String name, String path){
+    private boolean setClientInfo(int id, String name, String path){
 
         ClientInfo tmp = ClientInfo.findClientInfo(id,path);
 
@@ -63,7 +63,7 @@ public class Client extends Thread {
     
 
     private boolean login(){
-        String id = DEFAULT_ID;
+        int id = DEFAULT_ID;
         String name = DEFAULT_NAME;
         String password = DEFAULT_PASSWORD;
 
@@ -82,7 +82,7 @@ public class Client extends Thread {
         }
 
         password = (String)(logData.getData().get("PASS"));
-        id = (String)(logData.getData().get("ID"));
+        id = (int)(logData.getData().get("ID"));
         name = (String)(logData.getData().get("NAME"));
 
         System.out.println("Log data received from client : "+getClientName()+" : \n" +

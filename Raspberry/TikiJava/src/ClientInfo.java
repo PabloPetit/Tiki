@@ -40,7 +40,7 @@ public class ClientInfo implements Serializable {
         return true;
     }
 
-    public static ClientInfo findClientInfo(String id, String path){
+    public static ClientInfo findClientInfo(int id, String path){
 
         File root = new File(path);
 
@@ -48,7 +48,9 @@ public class ClientInfo implements Serializable {
 
             String tmp = f.getName().replace(".tki","");
 
-            if(tmp.equals(id)){
+            String idString = id+"";
+
+            if(tmp.equals(idString)){
                 try {
                     FileInputStream streamIn = new FileInputStream(f.getPath());
                     ObjectInputStream objectinputstream = new ObjectInputStream(streamIn);

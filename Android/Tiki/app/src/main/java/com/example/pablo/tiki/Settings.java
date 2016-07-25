@@ -25,8 +25,8 @@ public class Settings extends AppCompatActivity {
     public static final int MODE = 0;
     public static final String SET = "SET";
     public static final String NAME = "NAME";
-    public static final String IP = "IP";
     public static final String ID = "ID";
+    public static final String IP = "IP";
     public static final String PORT = "PORT";
     public static final String  PASSWORD = "PASSWORD";
     public static final String  ADMIN_PASSWORD = "ADMIN_PASSWORD";
