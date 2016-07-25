@@ -194,6 +194,7 @@ public class Client extends Thread {
             if(incoming == null){
                 try {
                     Thread.sleep(Pack.LITTLE_SLEEP);
+                    continue;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
