@@ -27,7 +27,7 @@ public class ServerInfo implements Serializable{
 
             File old = new File(path+"/server.tki");
 
-            if(old!=null){
+            if(old!=null){ // supposedly useless
                 old.delete();
             }
 

@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Pablo on 10/07/2016.
@@ -19,7 +20,7 @@ public class Client extends Thread {
     private ObjectOutputStream output;
 
     private boolean admin;
-    private boolean terminated;
+    private AtomicBoolean terminated;
 
 
     public Client(Socket socket,Server server){
@@ -29,7 +30,7 @@ public class Client extends Thread {
         this.input = null;
         this.output = null;
         this.admin = false;
-        this.terminated = false;
+        this.terminated = new AtomicBoolean(false);
     }
 
     private boolean setClientInfo(int id, String name, String path){
@@ -136,7 +137,7 @@ public class Client extends Thread {
             e.printStackTrace();
         }
 
-        server.getClients().remove(this);
+        server.removeClient(this);
 
         if (info != null){
             System.out.println("Connexion with client "+getClientName()+" ended");
@@ -174,18 +175,32 @@ public class Client extends Thread {
         }
     }
 
+    public synchronized void quit(){
+        terminated.set(true);
+    }
+
+    public void shutdown(){
+        System.out.println("Client "+getClientName()+" asked for shutdown");
+        if (!admin) {
+            System.out.println("Client "+getClientName()+" is not admin, cannot shutdown");
+            return;
+        }
+        server.quit();
+        quit();
+    }
+
     @Override
     public void run(){
 
         if(!init()){
             System.err.println("An error occured while login "+getClientName());
-            terminated = true;
+            terminated.set(true);
         }
 
-        while (!terminated){
+        while (!terminated.get()){
 
             if (socket.isClosed() || !socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown()){
-                terminated = true;
+                terminated.set(true);
                 break;
             }
 
@@ -203,8 +218,23 @@ public class Client extends Thread {
             System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
             switch (incoming.getPerformative()){
+
+                case Pack.QUIT:
+                    quit();
+                    break;
+
+                case Pack.SHUTDOWN:
+                    shutdown();
+                    break;
+
                 case Pack.LOG_ADMIN_DATA :
                     checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
+                    break;
+
+                case Pack.BLOCK_ACCESS:
+                    break;
+
+                case Pack.CLIENT_LIST:
                     break;
 
                 default:

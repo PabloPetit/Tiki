@@ -13,6 +13,7 @@ public class Main {
 
         if (info == null){
             System.err.println("Server info recovery failed");
+            return;
         }
 
         Server server = new Server(ip,port,info,resPath);

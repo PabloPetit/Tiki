@@ -52,11 +52,17 @@ public class Connect extends AsyncTask {
     }
 
     public boolean simpleLoggin(SharedPreferences settings){
-        Log.d(LOG_TAG,"Trying to log on server...");
 
         String password = settings.getString(Settings.PASSWORD,Settings.DEFAULT_PASSWORD);
         String name = settings.getString(Settings.NAME,Settings.DEFAULT_NAME);
         int id = settings.getInt(Settings.ID,Settings.DEFAULT_ID);
+
+        Log.d(LOG_TAG,"Current info : "+"\n" +
+                "Id : "+id+"\n" +
+                "Name : "+name+"\n" +
+                "Password : "+password+"\n");
+
+        Log.d(LOG_TAG,"Trying to log on server...");
 
 
         Pack server_name = Pack.readPack(Connexion.input);
@@ -85,6 +91,7 @@ public class Connect extends AsyncTask {
             Connexion.logged.set(true);
             Pack ack = new Pack(Pack.ACK);
             Pack.sendPack(ack,Connexion.output);
+            Log.d(LOG_TAG,"Login successful");
         }
         else if (response.getPerformative() == Pack.NEW_ID){
             Log.d(LOG_TAG,"New id received : "+(Integer)response.getData().get("ID"));
@@ -133,7 +140,11 @@ public class Connect extends AsyncTask {
         bundle.putString(Connexion.MESSAGE,message);
         messageHandler.setData(bundle);
         messageHandler.sendToTarget();
+        closeConnexion();
+        running.set(false);
+    }
 
+    public static void closeConnexion(){
         if(Connexion.socket != null){
             try {
                 Connexion.input.close();
@@ -146,7 +157,6 @@ public class Connect extends AsyncTask {
                 e.printStackTrace();
             }
         }
-        running.set(false);
     }
 
 

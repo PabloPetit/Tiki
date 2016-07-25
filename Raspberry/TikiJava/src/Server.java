@@ -8,11 +8,14 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by Pablo on 10/07/2016.
  */
 public class Server extends Thread{
+
+    public static final int TIMEOUT = 1000;
 
     public static final String DEFAULT_IP = "192.168.1.113";
     public static final int DEFAULT_PORT = 4200;
@@ -27,7 +30,7 @@ public class Server extends Thread{
 
     private ServerSocket socket;
 
-    private boolean terminated;
+    private AtomicBoolean terminated;
 
     private ArrayList<Client> clients;
 
@@ -38,7 +41,7 @@ public class Server extends Thread{
         this.port = port;
         this.info = info;
         this.socket = null;
-        this.terminated = false;
+        this.terminated = new AtomicBoolean(false);
         this.clients = new ArrayList<>();
         this.resPath = ressourcePath;
 
@@ -64,12 +67,50 @@ public class Server extends Thread{
         }
     }
 
+    public void quit(){
+        terminated.set(true);
+    }
+
+    public void shutdown(){
+
+        System.out.println("Server shutting down ...");
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.err.println("Failed to properly close socket");
+            e.printStackTrace();
+        }
+        System.out.println("The server is now offline");
+
+        for (Client c : clients){
+            c.quit();
+        }
+
+        System.out.println("Waiting for clients to end connexion... ["+ clients.size()+"]");
+        int i = 0;
+        for (Client c : clients){
+            try {
+                c.join(TIMEOUT);
+                System.out.println(""+ ++i);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return;
+            }
+        }
+
+        System.out.println("Server successfully closed");
+    }
+
+    public synchronized boolean removeClient(Client c){
+        return clients.remove(c);
+    }
+
 
     @Override
     public void run(){
         System.out.println("The server is now online");
 
-        while (!terminated){
+        while (!terminated.get()){
             try {
 
                 Socket comSock = socket.accept();
@@ -86,7 +127,7 @@ public class Server extends Thread{
                 e.printStackTrace();
             }
         }
-
+        shutdown();
     }
 
     public int getNewId(){
@@ -120,7 +161,7 @@ public class Server extends Thread{
         return socket;
     }
 
-    public boolean isTerminated() {
+    public AtomicBoolean getTerminated() {
         return terminated;
     }
 

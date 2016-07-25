@@ -60,7 +60,11 @@ public class MainMenu extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onStop() {
+        // TODO: Connect.closeConnexion(); ?
+        super.onStop();
+    }
 
     public void settings(View v){
 
