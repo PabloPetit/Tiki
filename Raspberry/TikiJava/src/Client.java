@@ -85,9 +85,9 @@ public class Client extends Thread {
         id = (int)(logData.getData().get("ID"));
         name = (String)(logData.getData().get("NAME"));
 
-        System.out.println("Log data received from client : "+getClientName()+" : \n" +
+        System.out.println("Log data received from client : "+getClientName()+"\n" +
                 "Id : "+id+"\n+" +
-                "Name : "+"\n"+
+                "Name : "+name+"\n"+
                 "Password : "+password+"\n");
         // Checking the password
         if(password.equals(server.getServerInfo().getPassword())){
@@ -158,13 +158,8 @@ public class Client extends Thread {
         }else {
             p = new Pack(Pack.DENIED);
         }
-        try{
-            output.writeObject(p);
-            output.flush();
-        } catch (IOException e) {
-            System.err.println("An error occured while login as admin "+getClientName());
-            e.printStackTrace();
-        }
+
+        Pack.sendPack(p,output);
     }
 
     public String getClientName(){
