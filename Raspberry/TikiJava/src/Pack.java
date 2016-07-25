@@ -54,7 +54,7 @@ public class Pack implements Serializable {
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
-                if (input.available() > 0){
+                if (input.available() > 0 || true){
                     int performative = ((Integer)input.readObject()) .intValue();
                     HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
                     p = new Pack(performative,data);
@@ -85,3 +85,4 @@ public class Pack implements Serializable {
         return false;
     }
 }
+
