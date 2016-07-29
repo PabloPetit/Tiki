@@ -71,14 +71,14 @@ public class Connect extends AsyncTask {
             Log.d(LOG_TAG,"Server name not received");
             return false;
         }
-        Connexion.serverName = (String) server_name.getData().get("NAME");
+        Connexion.serverName = (String) server_name.getData().get(Pack.NAME);
         Log.d(LOG_TAG,"Server name received : "+Connexion.serverName);
         Log.d(LOG_TAG,"Sending log data");
         Pack logData = new Pack(Pack.LOG_DATA);
 
-        logData.getData().put("PASS",password);
-        logData.getData().put("NAME",name);
-        logData.getData().put("ID",id);
+        logData.getData().put(Pack.PASSWORD,password);
+        logData.getData().put(Pack.NAME,name);
+        logData.getData().put(Pack.ID,id);
 
         Pack.sendPack(logData,Connexion.output);
 
@@ -95,9 +95,9 @@ public class Connect extends AsyncTask {
             Log.d(LOG_TAG,"Login successful");
         }
         else if (response.getPerformative() == Pack.NEW_ID){
-            Log.d(LOG_TAG,"New id received : "+(Integer)response.getData().get("ID"));
+            Log.d(LOG_TAG,"New id received : "+(Integer)response.getData().get(Pack.ID));
             SharedPreferences.Editor editor = settings.edit();
-            editor.putInt(Settings.ID, (Integer) response.getData().get("ID"));
+            editor.putInt(Settings.ID, (Integer) response.getData().get(Pack.ID));
             editor.commit();
 
             Log.d(LOG_TAG,"Sending ack");
@@ -125,7 +125,7 @@ public class Connect extends AsyncTask {
     public boolean adminLogin(SharedPreferences settings){
         String adminPassword = settings.getString(Settings.ADMIN_PASSWORD,Settings.DEFAULT_PASSWORD);
         Pack adminPass = new Pack(Pack.LOG_ADMIN_DATA);
-        adminPass.getData().put("ADMIN_PASSWORD",adminPassword);
+        adminPass.getData().put(Pack.ADMIN_PASSWORD,adminPassword);
         Pack.sendPack(adminPass,Connexion.output);
 
         Pack response = Pack.readPack(Connexion.input);

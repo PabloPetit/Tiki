@@ -70,7 +70,7 @@ public class Client extends Thread {
 
         //Step 1 : send the server name
         Pack server_name = new Pack(Pack.SERVER_NAME);
-        server_name.getData().put("NAME",server.getServerInfo().getName());
+        server_name.getData().put(Pack.NAME,server.getServerInfo().getName());
         Pack.sendPack(server_name,output);
 
         //Step 2 : received log info and check password
@@ -81,9 +81,9 @@ public class Client extends Thread {
             return false;
         }
 
-        password = (String)(logData.getData().get("PASS"));
-        id = (int)(logData.getData().get("ID"));
-        name = (String)(logData.getData().get("NAME"));
+        password = (String)(logData.getData().get(Pack.PASSWORD));
+        id = (int)(logData.getData().get(Pack.ID));
+        name = (String)(logData.getData().get(Pack.NAME));
 
         System.out.println("Log data received from client : "+getClientName()+"\n" +
                 "Id : "+id+"\n" +
@@ -101,7 +101,7 @@ public class Client extends Thread {
                 System.out.println("A new id is requested by client "+getClientName());
                 Pack newId = new Pack(Pack.NEW_ID);
                 int clientId = server.getNewId();
-                newId.getData().put("ID",clientId);
+                newId.getData().put(Pack.ID,clientId);
                 Pack.sendPack(newId,output);
 
                 System.out.println("New id sent to client "+getClientName());
@@ -187,7 +187,7 @@ public class Client extends Thread {
 
     public String getClientName(){
         if (info != null){
-            return "["+info.getName()+" ; "+info.getId()+" ]";
+            return info.getName()+":"+info.getId();
         }
         else {
             return "NOT_SET";
@@ -247,7 +247,7 @@ public class Client extends Thread {
                     break;
 
                 case Pack.LOG_ADMIN_DATA :
-                    checkAdminPassword((String) incoming.getData().get("ADMIN_PASSWORD"));
+                    checkAdminPassword((String) incoming.getData().get(Pack.ADMIN_PASSWORD));
                     break;
 
                 case Pack.BLOCK_ACCESS:

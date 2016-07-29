@@ -6,6 +6,11 @@ public class Pack{
     public static final int TIMEOUT = 5000;
     public static final int LITTLE_SLEEP = 50;
 
+    public static final String PASSWORD = "password";
+    public static final String NAME = "name";
+    public static final String ID = "id";
+    public static final String ADMIN_PASSWORD = "admin_password";
+
 
     public static final int LOG_DATA = 1;
     public static final int DENIED = 2;
