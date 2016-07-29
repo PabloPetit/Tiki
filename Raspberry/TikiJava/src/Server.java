@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.BindException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,7 +18,7 @@ public class Server extends Thread{
 
     public static final int TIMEOUT = 1000;
 
-    public static final String DEFAULT_IP = "192.168.1.113";
+    public static final String DEFAULT_IP = "192.168.1.35";//"192.168.1.113";
     public static final int DEFAULT_PORT = 4200;
     public static final int QUEUE_SIZE = 20;
 
@@ -60,7 +61,11 @@ public class Server extends Thread{
 
             return true;
 
-        }catch (IOException e){
+        }catch (BindException e){
+            System.err.println("Wrong ip, cannot open server");
+            return false;
+        }
+        catch (IOException e){
             System.err.println("Failed to open the server");
             e.printStackTrace();
             return false;
