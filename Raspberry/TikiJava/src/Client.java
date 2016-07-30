@@ -175,7 +175,7 @@ public class Client extends Thread {
 
         System.out.println("Pass received : "+password+" Actual pass : "+server.getServerInfo().getAdminPassword());
 
-        if (password == server.getServerInfo().getAdminPassword()){
+        if (password.equals(server.getServerInfo().getAdminPassword())){
             p = new Pack(Pack.ACCEPTED);
             admin = true;
             System.out.println("Client "+getClientName()+" is now connected as admin");
