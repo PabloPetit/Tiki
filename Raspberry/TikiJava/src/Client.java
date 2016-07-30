@@ -173,6 +173,8 @@ public class Client extends Thread {
 
         System.out.println("Client "+getClientName()+" is trying to log as admin");
 
+        System.out.println("Pass received : "+password+" Actual pass : "+server.getServerInfo().getAdminPassword());
+
         if (password == server.getServerInfo().getAdminPassword()){
             p = new Pack(Pack.ACCEPTED);
             admin = true;
@@ -219,6 +221,7 @@ public class Client extends Thread {
         while (!terminated.get()){
 
             if (socket.isClosed() || !socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown()){
+                //TODO : Not working, must read socket or detect IOExcepion
                 terminated.set(true);
                 break;
             }

@@ -169,7 +169,7 @@ public class Connect extends AsyncTask {
     @Override
     protected Object doInBackground(Object[] params) {
 
-        if (running.get()){
+        if (running.get()){ //TODO : THIS IS NOT WORKING !
             Log.d(LOG_TAG,"Connect:doInBackgroung is already running");
             return null;
         }
