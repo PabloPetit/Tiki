@@ -17,9 +17,10 @@ public class UserMenu extends AppCompatActivity {
         findViewById(R.id.adminZone).setVisibility((Connexion.admin_logged.get())?View.VISIBLE:View.INVISIBLE);
 
     }
-    
-    public void toggle(View v){
 
+    public void toggle(View v){
+        Intent intent = new Intent(this, Toggle.class);
+        startActivity(intent);
     }
 
     public void playSequence(View v){
@@ -32,6 +33,7 @@ public class UserMenu extends AppCompatActivity {
 
     public void quit(View v){
         Pack.sendPack(new Pack(Pack.QUIT),Connexion.output);
+        Connect.closeConnexion();
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
@@ -79,7 +81,6 @@ public class UserMenu extends AppCompatActivity {
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 }).show();
     }
@@ -89,7 +90,5 @@ public class UserMenu extends AppCompatActivity {
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }
-
-
 
 }

@@ -17,6 +17,7 @@ public class Client extends Thread {
     private ClientInfo info;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    private LedManager ledManger;
 
     private boolean admin;
     private AtomicBoolean terminated;
@@ -30,6 +31,7 @@ public class Client extends Thread {
         this.output = null;
         this.admin = false;
         this.terminated = new AtomicBoolean(false);
+        this.ledManger = server.getLedManager();
     }
 
     private boolean setClientInfo(int id, String name, String path){
@@ -266,6 +268,7 @@ public class Client extends Thread {
                 break;
 
             case Pack.TOGGLE :
+                ledManger.toggleLed((Integer) incoming.getData().get(Pack.ID),admin);
                 break;
 
             case Pack.SEQUENCE :

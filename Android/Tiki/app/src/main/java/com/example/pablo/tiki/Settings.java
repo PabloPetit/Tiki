@@ -14,7 +14,7 @@ import org.w3c.dom.Text;
 public class Settings extends AppCompatActivity {
 
     public static final String DEFAULT_NAME = "TIKI_CLIENT";
-    public static final String DEFAULT_IP =   "192.168.1.35";//"88.8.83.8" "81.64.39.231";
+    public static final String DEFAULT_IP =   "192.168.1.38";//"88.8.83.8" "81.64.39.231";
     public static final int DEFAULT_ID = -1;
     public static final int DEFAULT_PORT = 4200;
     public static final String DEFAULT_PASSWORD = "";

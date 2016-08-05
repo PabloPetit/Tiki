@@ -24,7 +24,8 @@
         <activity
             android:name=".Settings"
             android:screenOrientation="portrait" />
-        <activity android:name=".UserMenu"></activity>
+        <activity android:name=".UserMenu" />
+        <activity android:name=".Toggle"></activity>
     </application>
 
 </manifest>

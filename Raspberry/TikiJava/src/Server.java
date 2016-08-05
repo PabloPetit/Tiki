@@ -195,4 +195,8 @@ public class Server extends Thread{
     public ArrayList<Client> getClients() {
         return clients;
     }
+
+    public LedManager getLedManager() {
+        return ledManager;
+    }
 }

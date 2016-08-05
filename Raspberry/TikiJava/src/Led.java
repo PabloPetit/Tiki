@@ -31,9 +31,9 @@ public class Led {
         this.pin.setShutdownOptions(true, PinState.LOW);
     }
 
-    public void on(){ pin.low(); }
+    public void on(){ pin.high(); }
 
-    public void off(){ pin.high(); }
+    public void off(){ pin.low(); }
 
     public void toggle(){
         pin.toggle();
@@ -53,7 +53,6 @@ public class Led {
                 }
                 Thread.sleep(TEST_TIME_B);
             }
-            off();
         }catch (Exception e){
             e.printStackTrace();
         }
