@@ -35,6 +35,8 @@ public class Server extends Thread{
 
     private ArrayList<Client> clients;
 
+    private LedManager ledManager;
+
 
     public Server(String ip, int port,ServerInfo info,String ressourcePath){
 
@@ -45,7 +47,20 @@ public class Server extends Thread{
         this.terminated = new AtomicBoolean(false);
         this.clients = new ArrayList<>();
         this.resPath = ressourcePath;
+        this.ledManager = new LedManager();
 
+    }
+
+    public boolean initLedManager(){
+        System.out.println("Preparing leds ...");
+        if(!ledManager.initLeds()){
+            System.out.println("Failed to init leds");
+            return false;
+        }
+        System.out.println("Testing leds ...");
+        ledManager.testAllLeds();
+        System.out.println("Leds ok");
+        return true;
     }
 
 
@@ -55,7 +70,7 @@ public class Server extends Thread{
             System.out.println("Opening server ...");
             InetAddress addr = InetAddress.getByName(ip);
             socket = new ServerSocket(port,QUEUE_SIZE,addr);
-            System.out.println("The server is now open on :\n\nip : "
+            System.out.println("The server is open on :\n\nip : "
                     +socket.getInetAddress().getHostName()
                     +"\nport : " +socket.getLocalPort() + "\n");
 
@@ -103,7 +118,14 @@ public class Server extends Thread{
             }
         }
 
+        closeLeds();
+
         System.out.println("Server successfully closed");
+    }
+
+    public void closeLeds(){
+        System.out.println("Shuting down leds...");
+        ledManager.close();
     }
 
     public synchronized boolean removeClient(Client c){

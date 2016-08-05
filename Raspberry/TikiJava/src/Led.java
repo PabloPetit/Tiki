@@ -33,9 +33,7 @@ public class Led {
 
     public void on(){ pin.low(); }
 
-    public void off(){
-        pin.high();
-    }
+    public void off(){ pin.high(); }
 
     public void toggle(){
         pin.toggle();

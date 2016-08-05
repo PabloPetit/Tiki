@@ -20,6 +20,8 @@ public class Main {
 
         server.openServer();
 
+        server.initLedManager();
+
         server.run();
 
     }

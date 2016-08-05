@@ -135,6 +135,12 @@ public class LedManager{
         return true; // TODO : check if everything is ok
     }
 
+    public void testAllLeds(){
+        for (Led l : allLeds){
+            l.test();
+        }
+    }
+
     public void close(){
         Led.shutdown();
     }
