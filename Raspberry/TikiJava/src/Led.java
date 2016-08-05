@@ -28,13 +28,13 @@ public class Led {
         this.name = name;
         this.on = false;
         this.pin = gpio.provisionDigitalOutputPin(pin, name, PinState.HIGH);
-        pin.setShutdownOptions(true, PinState.LOW);
+        this.pin.setShutdownOptions(true, PinState.LOW);
     }
 
-    public void on(){ pin.on(); }
+    public void on(){ pin.low(); }
 
     public void off(){
-        pin.off();
+        pin.high();
     }
 
     public void toggle(){

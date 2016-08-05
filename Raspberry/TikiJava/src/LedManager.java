@@ -97,16 +97,17 @@ public class LedManager{
     
     public boolean initLeds(){
         int id = 0;
+
         LEFT_EYE = new Led(id++,"LEFT_EYE",RaspiPin.GPIO_14);
         RIGHT_EYE = new Led(id++,"RIGHT_EYE",RaspiPin.GPIO_10);
-        BIT_0 = new Led(id++,"BIT_0",RaspiPin.GPIO_7);
-        BIT_1 = new Led(id++,"BIT_1",RaspiPin.GPIO_0);
-        BIT_2 = new Led(id++,"BIT_2",RaspiPin.GPIO_1);
-        BIT_3 = new Led(id++,"BIT_3",RaspiPin.GPIO_2);
-        BIT_4 = new Led(id++,"BIT_4",RaspiPin.GPIO_3);
-        BIT_5 = new Led(id++,"BIT_5",RaspiPin.GPIO_4);
-        BIT_6 = new Led(id++,"BIT_6",RaspiPin.GPIO_5);
-        BIT_7 = new Led(id++,"BIT_7",RaspiPin.GPIO_6);
+        BIT_0 = new Led(id++,"BIT_0",RaspiPin.GPIO_07);
+        BIT_1 = new Led(id++,"BIT_1",RaspiPin.GPIO_00);
+        BIT_2 = new Led(id++,"BIT_2",RaspiPin.GPIO_01);
+        BIT_3 = new Led(id++,"BIT_3",RaspiPin.GPIO_02);
+        BIT_4 = new Led(id++,"BIT_4",RaspiPin.GPIO_03);
+        BIT_5 = new Led(id++,"BIT_5",RaspiPin.GPIO_04);
+        BIT_6 = new Led(id++,"BIT_6",RaspiPin.GPIO_05);
+        BIT_7 = new Led(id++,"BIT_7",RaspiPin.GPIO_06);
 
         allLeds = new ArrayList<>();
         bits = new ArrayList<>();
