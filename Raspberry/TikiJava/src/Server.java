@@ -18,7 +18,7 @@ public class Server extends Thread{
 
     public static final int TIMEOUT = 1000;
 
-    public static final String DEFAULT_IP = "192.168.1.35";//"192.168.1.113";
+    public static final String DEFAULT_IP = "192.168.1.38";//"192.168.1.113";
     public static final int DEFAULT_PORT = 4200;
     public static final int QUEUE_SIZE = 20;
 

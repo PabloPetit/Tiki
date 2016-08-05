@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1f86e0-66d9-4e72-9b3c-0f4da22a44dc" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/UserMenu.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/res/layout/activity_user_menu.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/Led.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Connect.java" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Connect.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Connexion.java" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Connexion.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Client.java" afterPath="$PROJECT_DIR$/src/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/LedManager.java" afterPath="$PROJECT_DIR$/src/LedManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Server.java" afterPath="$PROJECT_DIR$/src/Server.java" />
     </list>
     <ignored path="TikiJava.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -66,10 +58,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="LedManager.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LedManager.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/LedManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1065">
+            <state relative-caret-position="90">
               <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -115,11 +107,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Server.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="825">
-              <caret line="64" column="60" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
+            <state relative-caret-position="165">
+              <caret line="20" column="57" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="57" />
               <folding />
             </state>
           </provider>
@@ -159,11 +151,11 @@
         <option value="$PROJECT_DIR$/src/ClientInfo.java" />
         <option value="$PROJECT_DIR$/src/Main.java" />
         <option value="$PROJECT_DIR$/src/ServerInfo.java" />
-        <option value="$PROJECT_DIR$/src/Server.java" />
         <option value="$PROJECT_DIR$/src/Pack.java" />
         <option value="$PROJECT_DIR$/src/Led.java" />
         <option value="$PROJECT_DIR$/src/LedManager.java" />
         <option value="$PROJECT_DIR$/src/Client.java" />
+        <option value="$PROJECT_DIR$/src/Server.java" />
       </list>
     </option>
   </component>
@@ -814,14 +806,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="64" column="60" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ServerInfo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="345">
@@ -873,7 +857,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/LedManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1065">
+        <state relative-caret-position="90">
           <caret line="6" column="23" selection-start-line="6" selection-start-column="23" selection-end-line="6" selection-end-column="23" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -882,6 +866,14 @@
             <element signature="e#3255#3256#0" expanded="true" />
             <element signature="e#3285#3286#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="20" column="57" selection-start-line="20" selection-start-column="57" selection-end-line="20" selection-end-column="57" />
+          <folding />
         </state>
       </provider>
     </entry>
