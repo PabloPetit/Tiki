@@ -37,6 +37,7 @@ public class Connexion {
     public static AtomicBoolean connected = new AtomicBoolean(false);
     public static AtomicBoolean logged = new AtomicBoolean(false);
     public static AtomicBoolean admin_logged = new AtomicBoolean(false);
+    public static AtomicBoolean server_locked = new AtomicBoolean(false);
 
 
 

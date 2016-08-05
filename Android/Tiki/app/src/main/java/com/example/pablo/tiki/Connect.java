@@ -1,6 +1,7 @@
 package com.example.pablo.tiki;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -139,7 +140,7 @@ public class Connect extends AsyncTask {
         return true;
     }
 
-    public void abortConnexion(MainMenu main,String title, String message){
+    public static void abortConnexion(MainMenu main,String title, String message){
         Message messageHandler = main.getConnexionHandler().obtainMessage();
         Bundle bundle = new Bundle();
         bundle.putString(Connexion.TITLE,title);
@@ -196,8 +197,13 @@ public class Connect extends AsyncTask {
             return null;
         }
         adminLogin(settings);
+
+        Intent intent = new Intent(main, UserMenu.class);
+        main.startActivity(intent);
+
         running.set(false);
         return null;
     }
+
     
 }

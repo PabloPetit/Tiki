@@ -203,11 +203,20 @@ public class Client extends Thread {
     public void shutdown(){
         System.out.println("Client "+getClientName()+" asked for shutdown");
         if (!admin) {
-            System.out.println("Client "+getClientName()+" is not admin, cannot shutdown");
+            System.out.println("Client "+getClientName()+" is not admin");
             return;
         }
+        System.out.println("Permission granted");
         server.quit();
         quit();
+    }
+
+    public boolean checkConnexionOk(){
+        if(socket.isClosed() || !socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown()){
+            terminated.set(true);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -220,11 +229,7 @@ public class Client extends Thread {
 
         while (!terminated.get()){
 
-            if (socket.isClosed() || !socket.isConnected() || socket.isInputShutdown() || socket.isOutputShutdown()){
-                //TODO : Not working, must read socket or detect IOExcepion
-                terminated.set(true);
-                break;
-            }
+            if(!checkConnexionOk()) break;
 
             Pack incoming = Pack.readPack(input);
 
@@ -236,36 +241,55 @@ public class Client extends Thread {
                     e.printStackTrace();
                 }
             }
-
             System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
-            switch (incoming.getPerformative()){
-
-                case Pack.QUIT:
-                    quit();
-                    break;
-
-                case Pack.SHUTDOWN:
-                    shutdown();
-                    break;
-
-                case Pack.LOG_ADMIN_DATA :
-                    checkAdminPassword((String) incoming.getData().get(Pack.ADMIN_PASSWORD));
-                    break;
-
-                case Pack.BLOCK_ACCESS:
-                    break;
-
-                case Pack.CLIENT_LIST:
-                    break;
-
-                default:
-                    System.out.println("Wrong performative received from client : "+getClientName());
-                    break;
-            }
+            switchPerformative(incoming);
 
         }
         terminate();
+    }
+
+
+    public void switchPerformative(Pack incoming){
+        switch (incoming.getPerformative()){
+
+            case Pack.QUIT:
+                quit();
+                break;
+
+            case Pack.SHUTDOWN:
+                shutdown();
+                break;
+
+            case Pack.LOG_ADMIN_DATA :
+                checkAdminPassword((String) incoming.getData().get(Pack.ADMIN_PASSWORD));
+                break;
+
+            case Pack.TOGGLE :
+                break;
+
+            case Pack.SEQUENCE :
+                break;
+
+            case Pack.ON :
+                break;
+
+            case Pack.OFF :
+                break;
+
+            case Pack.BLOCK_ACCESS:
+                break;
+
+            case Pack.RANDOM :
+                break;
+
+            case Pack.CLIENT_LIST:
+                break;
+
+            default:
+                System.out.println("Wrong performative received from client : "+getClientName());
+                break;
+        }
     }
 
 }
