@@ -7,6 +7,7 @@ import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
 import com.pi4j.io.gpio.PinState;
 import com.pi4j.io.gpio.RaspiPin;
+import com.pi4j.io.gpio.Pin;
 
 public class Led {
 
@@ -30,9 +31,7 @@ public class Led {
         pin.setShutdownOptions(true, PinState.LOW);
     }
 
-    public void on(){
-        pin.on();
-    }
+    public void on(){ pin.on(); }
 
     public void off(){
         pin.off();
