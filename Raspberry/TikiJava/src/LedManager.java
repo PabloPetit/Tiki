@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.pi4j.io.gpio.RaspiPin;
+
+
 /**
  * Created by Pablo on 19/07/2016.
  */

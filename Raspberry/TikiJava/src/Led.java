@@ -2,7 +2,6 @@
  * Created by Pablo on 01/08/2016.
  */
 
-
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
