@@ -27,7 +27,7 @@ public class Led {
         this.id = id;
         this.name = name;
         this.on = false;
-        this.pin = gpio.provisionDigitalOutputPin(pin, name, PinState.HIGH);
+        this.pin = gpio.provisionDigitalOutputPin(pin, name, PinState.LOW);
         this.pin.setShutdownOptions(true, PinState.LOW);
     }
 
@@ -53,6 +53,7 @@ public class Led {
                 }
                 Thread.sleep(TEST_TIME_B);
             }
+            off();
         }catch (Exception e){
             e.printStackTrace();
         }
