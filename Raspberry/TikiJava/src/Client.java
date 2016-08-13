@@ -243,7 +243,7 @@ public class Client extends Thread {
                     e.printStackTrace();
                 }
             }
-            //System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
+            System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
             switchPerformative(incoming);
 

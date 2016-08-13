@@ -2,6 +2,7 @@ package com.example.pablo.tiki;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -55,9 +56,8 @@ public class Toggle extends AppCompatActivity {
         }
 
         public boolean onTouch(View v, MotionEvent event) {
-
             Pack p;
-            
+            Log.d(Connect.LOG_TAG,"Event : "+event.getAction());
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 p = new Pack(Pack.ON);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {

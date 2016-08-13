@@ -148,7 +148,7 @@ public class Server extends Thread{
                 Client newClient = new Client(comSock,this);
                 clients.add(newClient);
                 newClient.run();
-
+                System.out.println("Back to the server");
             }catch (IOException e){
                 System.err.println("The server failed to accept a client");
                 e.printStackTrace();
