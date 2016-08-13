@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1f86e0-66d9-4e72-9b3c-0f4da22a44dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/.idea/misc.xml" afterPath="$PROJECT_DIR$/../../Android/Tiki/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Client.java" afterPath="$PROJECT_DIR$/src/Client.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Server.java" afterPath="$PROJECT_DIR$/src/Server.java" />
     </list>
     <ignored path="TikiJava.iws" />
@@ -98,11 +96,11 @@
       <file leaf-file-name="Server.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="150" column="57" selection-start-line="150" selection-start-column="57" selection-end-line="150" selection-end-column="57" />
+            <state relative-caret-position="256">
+              <caret line="149" column="34" selection-start-line="149" selection-start-column="34" selection-end-line="149" selection-end-column="34" />
               <folding>
-                <element signature="e#4919#4920#0" expanded="true" />
-                <element signature="e#4952#4953#0" expanded="true" />
+                <element signature="e#4921#4922#0" expanded="true" />
+                <element signature="e#4954#4955#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -621,8 +619,8 @@
         <state relative-caret-position="825">
           <caret line="64" column="60" selection-start-line="64" selection-start-column="60" selection-end-line="64" selection-end-column="60" />
           <folding>
-            <element signature="e#4919#4920#0" expanded="true" />
-            <element signature="e#4952#4953#0" expanded="true" />
+            <element signature="e#4921#4922#0" expanded="true" />
+            <element signature="e#4954#4955#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -676,8 +674,8 @@
         <state relative-caret-position="720">
           <caret line="55" column="59" selection-start-line="55" selection-start-column="59" selection-end-line="55" selection-end-column="59" />
           <folding>
-            <element signature="e#4919#4920#0" expanded="true" />
-            <element signature="e#4952#4953#0" expanded="true" />
+            <element signature="e#4921#4922#0" expanded="true" />
+            <element signature="e#4954#4955#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -732,8 +730,8 @@
         <state relative-caret-position="720">
           <caret line="55" column="59" selection-start-line="55" selection-start-column="59" selection-end-line="55" selection-end-column="59" />
           <folding>
-            <element signature="e#4919#4920#0" expanded="true" />
-            <element signature="e#4952#4953#0" expanded="true" />
+            <element signature="e#4921#4922#0" expanded="true" />
+            <element signature="e#4954#4955#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -797,8 +795,8 @@
         <state relative-caret-position="720">
           <caret line="55" column="59" selection-start-line="55" selection-start-column="59" selection-end-line="55" selection-end-column="59" />
           <folding>
-            <element signature="e#4919#4920#0" expanded="true" />
-            <element signature="e#4952#4953#0" expanded="true" />
+            <element signature="e#4921#4922#0" expanded="true" />
+            <element signature="e#4954#4955#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -886,11 +884,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="150" column="57" selection-start-line="150" selection-start-column="57" selection-end-line="150" selection-end-column="57" />
+        <state relative-caret-position="256">
+          <caret line="149" column="34" selection-start-line="149" selection-start-column="34" selection-end-line="149" selection-end-column="34" />
           <folding>
-            <element signature="e#4919#4920#0" expanded="true" />
-            <element signature="e#4952#4953#0" expanded="true" />
+            <element signature="e#4921#4922#0" expanded="true" />
+            <element signature="e#4954#4955#0" expanded="true" />
           </folding>
         </state>
       </provider>
