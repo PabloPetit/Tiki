@@ -91,6 +91,6 @@
         android:text="0"
         android:id="@+id/buttonBit0"
         android:layout_alignTop="@+id/buttonBit1"
-        android:layout_alignParentEnd="true" />
+        android:layout_toEndOf="@+id/buttonBit1" />
 
 </RelativeLayout>

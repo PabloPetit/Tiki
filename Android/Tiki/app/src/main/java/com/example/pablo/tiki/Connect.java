@@ -154,13 +154,15 @@ public class Connect extends AsyncTask {
     public static void closeConnexion(){
         if(Connexion.socket != null){
             try {
+
+                //TODO check if null
                 Connexion.input.close();
                 Connexion.output.close();
                 Connexion.socket.close();
                 Connexion.socket = null;
                 Connexion.input = null;
                 Connexion.output = null;
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

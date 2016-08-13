@@ -243,7 +243,7 @@ public class Client extends Thread {
                     e.printStackTrace();
                 }
             }
-            System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
+            //System.out.println("New message received from "+getClientName()+" : "+incoming.getPerformative());
 
             switchPerformative(incoming);
 
@@ -254,7 +254,6 @@ public class Client extends Thread {
 
     public void switchPerformative(Pack incoming){
         switch (incoming.getPerformative()){
-
             case Pack.QUIT:
                 quit();
                 break;

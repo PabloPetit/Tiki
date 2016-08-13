@@ -15,38 +15,38 @@ public class Toggle extends AppCompatActivity {
 
 
         final Button left = (Button) findViewById(R.id.buttonLeftEye);
-        left.setOnClickListener(new ToggleListener(0));
+        left.setOnTouchListener(new ToggleListener(0));
         final Button right = (Button) findViewById(R.id.buttonRightEye);
-        right.setOnClickListener(new ToggleListener(1));
+        right.setOnTouchListener(new ToggleListener(1));
 
         final Button bit0 = (Button) findViewById(R.id.buttonBit0);
-        bit0.setOnClickListener(new ToggleListener(2));
+        bit0.setOnTouchListener(new ToggleListener(2));
 
         final Button bit1 = (Button) findViewById(R.id.buttonBit1);
-        bit1.setOnClickListener(new ToggleListener(3));
+        bit1.setOnTouchListener(new ToggleListener(3));
 
         final Button bit2 = (Button) findViewById(R.id.buttonBit2);
-        bit2.setOnClickListener(new ToggleListener(3));
+        bit2.setOnTouchListener(new ToggleListener(4));
 
         final Button bit3 = (Button) findViewById(R.id.buttonBit3);
-        bit3.setOnClickListener(new ToggleListener(3));
+        bit3.setOnTouchListener(new ToggleListener(5));
 
         final Button bit4 = (Button) findViewById(R.id.buttonBit4);
-        bit4.setOnClickListener(new ToggleListener(4));
+        bit4.setOnTouchListener(new ToggleListener(6));
 
         final Button bit5 = (Button) findViewById(R.id.buttonBit5);
-        bit5.setOnClickListener(new ToggleListener(5));
+        bit5.setOnTouchListener(new ToggleListener(7));
 
         final Button bit6 = (Button) findViewById(R.id.buttonBit6);
-        bit6.setOnClickListener(new ToggleListener(6));
+        bit6.setOnTouchListener(new ToggleListener(8));
 
         final Button bit7 = (Button) findViewById(R.id.buttonBit7);
-        bit7.setOnClickListener(new ToggleListener(7));
+        bit7.setOnTouchListener(new ToggleListener(9));
 
     }
 
 
-    class ToggleListener implements View.OnClickListener {
+    class ToggleListener implements View.OnTouchListener {
 
         private int id;
 
@@ -54,11 +54,20 @@ public class Toggle extends AppCompatActivity {
             this.id = id;
         }
 
-        @Override
-        public void onClick(View v) {
-            Pack p = new Pack(Pack.TOGGLE);
+        public boolean onTouch(View v, MotionEvent event) {
+
+            Pack p;
+            
+            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                p = new Pack(Pack.ON);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                p = new Pack(Pack.OFF);
+            }else {
+                return false;
+            }
             p.getData().put(Pack.ID,id);
             Pack.sendPack(p,Connexion.output);
+            return true;
         }
     }
 }
