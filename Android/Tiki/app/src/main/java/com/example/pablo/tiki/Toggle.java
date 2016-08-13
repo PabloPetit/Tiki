@@ -60,8 +60,10 @@ public class Toggle extends AppCompatActivity {
             Log.d(Connect.LOG_TAG,"Event : "+event.getAction());
             if(event.getAction() == MotionEvent.ACTION_DOWN) {
                 p = new Pack(Pack.ON);
+                Log.d(Connect.LOG_TAG,"Down");
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 p = new Pack(Pack.OFF);
+                Log.d(Connect.LOG_TAG,"up");
             }else {
                 return false;
             }

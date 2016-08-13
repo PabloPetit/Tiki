@@ -274,9 +274,11 @@ public class Client extends Thread {
                 break;
 
             case Pack.ON :
+                ledManger.onLed((Integer) incoming.getData().get(Pack.ID),admin);
                 break;
 
             case Pack.OFF :
+                ledManger.offLed((Integer) incoming.getData().get(Pack.ID),admin);
                 break;
 
             case Pack.BLOCK_ACCESS:
