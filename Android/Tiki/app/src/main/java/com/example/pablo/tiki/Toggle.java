@@ -58,12 +58,10 @@ public class Toggle extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             Pack p;
             Log.d(Connect.LOG_TAG,"Event : "+event.getAction());
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
+            if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_HOVER_ENTER) {
                 p = new Pack(Pack.ON);
-                Log.d(Connect.LOG_TAG,"Down");
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_HOVER_EXIT) {
                 p = new Pack(Pack.OFF);
-                Log.d(Connect.LOG_TAG,"up");
             }else {
                 return false;
             }

@@ -1,14 +1,15 @@
 package com.example.pablo.tiki;
 
-import android.util.Log;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Pack{
+public class Pack implements Serializable{
+
+    private static final long serialVersionUID = -2746547097176689395L;
 
     public static final int TIMEOUT = 5000;
     public static final int LITTLE_SLEEP = 50;
@@ -36,6 +37,8 @@ public class Pack{
     public static final int BLOCK_ACCESS = 14;
     public static final int RANDOM = 15;
     public static final int CLIENT_LIST = 16;
+    public static final int SLEEP = 17;
+
     private int performative;
     private HashMap<String, Object> data;
 
@@ -64,12 +67,8 @@ public class Pack{
         long start = System.currentTimeMillis();
         while (System.currentTimeMillis() - start < TIMEOUT){
             try {
-
-                int performative = ((Integer)input.readObject()) .intValue();
-                HashMap<String,Object> data = (HashMap<String, Object>)input.readObject();
-                p = new Pack(performative,data);
+                p = (Pack)input.readObject();
                 break;
-
             } catch (EOFException e) {
                 try {
                     Thread.sleep(LITTLE_SLEEP);
@@ -89,10 +88,7 @@ public class Pack{
     public static boolean sendPack(Pack p, ObjectOutputStream output){
         try {
             output.reset();
-            output.writeObject(new Integer(p.getPerformative()));
-            output.flush();
-            output.reset();
-            output.writeObject(p.getData());
+            output.writeObject(p);
             output.flush();
             return true;
         } catch (IOException e) {
