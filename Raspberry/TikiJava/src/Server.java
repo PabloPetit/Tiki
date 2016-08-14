@@ -139,7 +139,6 @@ public class Server extends Thread{
 
         while (!terminated.get()){
             try {
-
                 Socket comSock = socket.accept();
                 System.out.println("New connection established with [ " +
                         comSock.getInetAddress().getHostName() +
@@ -148,7 +147,6 @@ public class Server extends Thread{
                 Client newClient = new Client(comSock,this);
                 clients.add(newClient);
                 newClient.start();
-                System.out.println("Back to the server");
             }catch (IOException e){
                 System.err.println("The server failed to accept a client");
                 e.printStackTrace();
