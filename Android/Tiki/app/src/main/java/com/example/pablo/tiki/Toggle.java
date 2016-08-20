@@ -4,72 +4,128 @@ import android.graphics.Rect;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 public class Toggle extends AppCompatActivity {
+
+
+    public static ArrayList<Led> leds;
+    public static boolean lock;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_toggle);
 
+        lock = false;
 
-        final Button left = (Button) findViewById(R.id.buttonLeftEye);
-        left.setOnTouchListener(new ToggleListener(0));
-        final Button right = (Button) findViewById(R.id.buttonRightEye);
-        right.setOnTouchListener(new ToggleListener(1));
+        leds = new ArrayList<>();
+        leds.add(new Led(0,(ImageView) findViewById(R.id.buttonLeftEye)));
+        leds.add(new Led(1,(ImageView) findViewById(R.id.buttonRightEye)));
+        leds.add(new Led(2,(ImageView) findViewById(R.id.buttonBit0)));
+        leds.add(new Led(3,(ImageView) findViewById(R.id.buttonBit1)));
+        leds.add(new Led(4,(ImageView) findViewById(R.id.buttonBit2)));
+        leds.add(new Led(5,(ImageView) findViewById(R.id.buttonBit3)));
+        leds.add(new Led(5,(ImageView) findViewById(R.id.buttonBit4)));
+        leds.add(new Led(6,(ImageView) findViewById(R.id.buttonBit5)));
+        leds.add(new Led(7,(ImageView) findViewById(R.id.buttonBit6)));
+        leds.add(new Led(8,(ImageView) findViewById(R.id.buttonBit7)));
 
-        final Button bit0 = (Button) findViewById(R.id.buttonBit0);
-        bit0.setOnTouchListener(new ToggleListener(2));
 
-        final Button bit1 = (Button) findViewById(R.id.buttonBit1);
-        bit1.setOnTouchListener(new ToggleListener(3));
+        final RelativeLayout layout = (RelativeLayout) findViewById(R.id.toogleLayout);
+        layout.setOnDragListener(new ToggleListener());
+    }
 
-        final Button bit2 = (Button) findViewById(R.id.buttonBit2);
-        bit2.setOnTouchListener(new ToggleListener(4));
 
-        final Button bit3 = (Button) findViewById(R.id.buttonBit3);
-        bit3.setOnTouchListener(new ToggleListener(5));
+    class Led{
 
-        final Button bit4 = (Button) findViewById(R.id.buttonBit4);
-        bit4.setOnTouchListener(new ToggleListener(6));
+        private boolean on;
+        private int id;
+        private ImageView image;
+        private Rect rect;
 
-        final Button bit5 = (Button) findViewById(R.id.buttonBit5);
-        bit5.setOnTouchListener(new ToggleListener(7));
+        public Led(int id, ImageView image) {
+            this.id = id;
+            this.image = image;
+            this.rect = new Rect();
+            this.on = false;
 
-        final Button bit6 = (Button) findViewById(R.id.buttonBit6);
-        bit6.setOnTouchListener(new ToggleListener(8));
+            image.getHitRect(rect);
+            this.image.setVisibility(View.INVISIBLE);
+        }
 
-        final Button bit7 = (Button) findViewById(R.id.buttonBit7);
-        bit7.setOnTouchListener(new ToggleListener(9));
+        public void drag(boolean isOnMe){
+            if(Toggle.lock)return;
+            if (isOnMe && !on){
+                on();
+            }
+            else if(!isOnMe && on){
+                off();
+            }
+
+        }
+
+        public void touch(boolean isOnMe, boolean down){
+            if(!isOnMe)return;
+
+            if(down && Toggle.lock){
+                toggle();
+            }
+            else if(!down && on){
+                off();
+            }
+
+        }
+
+        public void on(){
+            this.image.setVisibility(View.VISIBLE);
+        }
+
+        public void off(){
+            this.image.setVisibility(View.INVISIBLE);
+        }
+
+        public void toggle(){
+
+        }
+
 
 
     }
 
+    class ToggleListener implements View.OnDragListener, View.OnTouchListener {
 
-    class ToggleListener implements View.OnTouchListener {
-
-        private int id;
-
-        public ToggleListener(int id){
-            this.id = id;
+        @Override
+        public boolean onDrag(View v, DragEvent event) {
+            for(Led l : Toggle.leds){
+                l.drag(l.rect.contains((int)event.getX(),(int)event.getY()));
+            }
+            return true;
         }
 
+        @Override
         public boolean onTouch(View v, MotionEvent event) {
-            Pack p;
-            Log.d(Connect.LOG_TAG,id+" Event : "+event.getAction()+" X : "+event.getX()+"Y : "+event.getY());
-            
-            if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                p = new Pack(Pack.ON);
-            } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                p = new Pack(Pack.OFF);
-            }else {
-                return false;
+            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                for(Led l : Toggle.leds){
+                    l.touch(l.rect.contains((int)event.getX(),(int)event.getY()),true);
+                }
+            } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
+                for(Led l : Toggle.leds){
+                    l.touch(l.rect.contains((int)event.getX(),(int)event.getY()),false);
+                }
             }
-            p.getData().put(Pack.ID,id);
-            Pack.sendPack(p,Connexion.output);
             return true;
         }
     }

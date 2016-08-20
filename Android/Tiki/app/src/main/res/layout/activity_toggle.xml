@@ -3,94 +3,90 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.pablo.tiki.Toggle">
+    tools:context="com.example.pablo.tiki.Toggle"
+    android:foreground="@drawable/tiki_face"
+    android:id="@+id/toogleLayout">
 
-    <Button
+    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="L"
-        android:id="@+id/buttonLeftEye"
-        android:layout_marginTop="141dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="44dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="R"
-        android:id="@+id/buttonRightEye"
-        android:layout_alignTop="@+id/buttonLeftEye"
-        android:layout_toEndOf="@+id/buttonLeftEye"
-        android:layout_marginStart="64dp" />
-
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="7"
         android:id="@+id/buttonBit7"
-        android:layout_marginBottom="90dp"
+        android:layout_marginBottom="126dp"
+        android:src="@drawable/green_circle"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="41dp" />
 
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="6"
-        android:id="@+id/buttonBit6"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit5"
+        android:src="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit7"
         android:layout_toEndOf="@+id/buttonBit7" />
 
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="5"
-        android:id="@+id/buttonBit5"
-        android:layout_alignTop="@+id/buttonBit6"
-        android:layout_toEndOf="@+id/buttonBit6" />
-
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="4"
-        android:id="@+id/buttonBit4"
-        android:layout_alignTop="@+id/buttonBit5"
-        android:layout_toEndOf="@+id/buttonLeftEye" />
-
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="3"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/buttonBit3"
-        android:layout_alignTop="@+id/buttonBit4"
-        android:layout_toEndOf="@+id/buttonBit4" />
+        android:src="@drawable/green_circle"
+        android:layout_alignTop="@+id/buttonBit5"
+        android:layout_centerHorizontal="true" />
 
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="2"
-        android:id="@+id/buttonBit2"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit1"
+        android:src="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit3"
         android:layout_toEndOf="@+id/buttonBit3" />
 
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="1"
-        android:id="@+id/buttonBit1"
-        android:layout_alignTop="@+id/buttonBit2"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit6"
+        android:src="@drawable/green_circle"
+        android:layout_below="@+id/buttonBit5"
+        android:layout_toStartOf="@+id/buttonBit5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit4"
+        android:src="@drawable/green_circle"
+        android:layout_below="@+id/buttonBit5"
+        android:layout_alignStart="@+id/buttonBit5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit2"
+        android:src="@drawable/green_circle"
+        android:layout_alignTop="@+id/buttonBit4"
+        android:layout_toEndOf="@+id/buttonBit4" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit0"
+        android:src="@drawable/green_circle"
+        android:layout_below="@+id/buttonBit1"
         android:layout_toEndOf="@+id/buttonBit2" />
 
-    <Button
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:text="0"
-        android:id="@+id/buttonBit0"
-        android:layout_alignTop="@+id/buttonBit1"
-        android:layout_toEndOf="@+id/buttonBit1" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLeftEye"
+        android:layout_marginTop="140dp"
+        android:src="@drawable/blue_circle"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/buttonBit3" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonRightEye"
+        android:src="@drawable/blue_circle"
+        android:layout_alignTop="@+id/buttonLeftEye"
+        android:layout_toEndOf="@+id/buttonBit3" />
 </RelativeLayout>
