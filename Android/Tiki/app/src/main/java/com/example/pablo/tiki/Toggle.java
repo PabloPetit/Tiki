@@ -45,7 +45,10 @@ public class Toggle extends AppCompatActivity {
 
 
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.toogleLayout);
-        layout.setOnDragListener(new ToggleListener());
+
+        ToggleListener listener = new ToggleListener();
+        layout.setOnDragListener(listener);
+        layout.setOnTouchListener(listener);
     }
 
 
@@ -61,10 +64,21 @@ public class Toggle extends AppCompatActivity {
             this.image = image;
             this.rect = new Rect();
             this.on = false;
-
             image.getHitRect(rect);
-            this.image.setVisibility(View.INVISIBLE);
+
+
+            int[] posXY = new int[2];
+            image.getLocationOnScreen(posXY);
+            int x = posXY[0];
+            int y = posXY[1];
+
+            rect.set(x,y,x+image.getWidth(),y+image.getHeight());
+
+            Log.d(Connect.LOG_TAG,"Constructor : "+rect.toShortString());
+
+
         }
+
 
         public void drag(boolean isOnMe){
             if(Toggle.lock)return;

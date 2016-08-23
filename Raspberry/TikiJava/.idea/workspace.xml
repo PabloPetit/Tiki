@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b1f86e0-66d9-4e72-9b3c-0f4da22a44dc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Server.java" afterPath="$PROJECT_DIR$/src/Server.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/.idea/gradle.xml" afterPath="$PROJECT_DIR$/../../Android/Tiki/.idea/gradle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Toggle.java" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/java/com/example/pablo/tiki/Toggle.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/res/layout/activity_toggle.xml" afterPath="$PROJECT_DIR$/../../Android/Tiki/app/src/main/res/layout/activity_toggle.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/build.gradle" afterPath="$PROJECT_DIR$/../../Android/Tiki/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../../Android/Tiki/gradle/wrapper/gradle-wrapper.properties" afterPath="$PROJECT_DIR$/../../Android/Tiki/gradle/wrapper/gradle-wrapper.properties" />
     </list>
     <ignored path="TikiJava.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -96,7 +101,7 @@
       <file leaf-file-name="Server.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="270">
+            <state relative-caret-position="15">
               <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
               <folding />
             </state>
@@ -477,7 +482,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -879,7 +884,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
+        <state relative-caret-position="15">
           <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
           <folding />
         </state>

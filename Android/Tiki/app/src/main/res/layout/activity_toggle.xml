@@ -4,40 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.pablo.tiki.Toggle"
-    android:foreground="@drawable/tiki_face"
-    android:id="@+id/toogleLayout">
+    android:id="@+id/toogleLayout"
+    android:background="@drawable/tiki_face">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit7"
-        android:layout_marginBottom="126dp"
-        android:src="@drawable/green_circle"
+        android:layout_marginBottom="125dp"
+        android:background="@drawable/green_circle"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="41dp" />
+        android:layout_marginStart="45dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit5"
-        android:src="@drawable/green_circle"
+        android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit7"
-        android:layout_toEndOf="@+id/buttonBit7" />
+        android:layout_toStartOf="@+id/buttonBit3" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit3"
-        android:src="@drawable/green_circle"
+        android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit5"
-        android:layout_centerHorizontal="true" />
+        android:layout_toEndOf="@+id/buttonLeftEye" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit1"
-        android:src="@drawable/green_circle"
+        android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit3"
         android:layout_toEndOf="@+id/buttonBit3" />
 
@@ -45,48 +45,49 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit6"
-        android:src="@drawable/green_circle"
         android:layout_below="@+id/buttonBit5"
-        android:layout_toStartOf="@+id/buttonBit5" />
+        android:layout_toStartOf="@+id/buttonBit5"
+        android:background="@drawable/green_circle" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit4"
-        android:src="@drawable/green_circle"
+        android:background="@drawable/green_circle"
         android:layout_below="@+id/buttonBit5"
-        android:layout_alignStart="@+id/buttonBit5" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonBit2"
-        android:src="@drawable/green_circle"
-        android:layout_alignTop="@+id/buttonBit4"
-        android:layout_toEndOf="@+id/buttonBit4" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonBit0"
-        android:src="@drawable/green_circle"
-        android:layout_below="@+id/buttonBit1"
-        android:layout_toEndOf="@+id/buttonBit2" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/buttonLeftEye"
-        android:layout_marginTop="140dp"
-        android:src="@drawable/blue_circle"
-        android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/buttonBit3" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/buttonBit2"
+        android:background="@drawable/green_circle"
+        android:layout_below="@+id/buttonBit3"
+        android:layout_toStartOf="@+id/buttonBit1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBit0"
+        android:background="@drawable/green_circle"
+        android:layout_alignTop="@+id/buttonBit2"
+        android:layout_alignStart="@+id/buttonBit1" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonLeftEye"
+        android:layout_marginTop="131dp"
+        android:background="@drawable/blue_circle"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/buttonBit7" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/buttonRightEye"
-        android:src="@drawable/blue_circle"
+        android:background="@drawable/blue_circle"
         android:layout_alignTop="@+id/buttonLeftEye"
         android:layout_toEndOf="@+id/buttonBit3" />
 </RelativeLayout>
