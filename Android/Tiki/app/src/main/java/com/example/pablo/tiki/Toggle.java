@@ -38,17 +38,17 @@ public class Toggle extends AppCompatActivity {
         leds.add(new Led(3,(ImageView) findViewById(R.id.buttonBit1)));
         leds.add(new Led(4,(ImageView) findViewById(R.id.buttonBit2)));
         leds.add(new Led(5,(ImageView) findViewById(R.id.buttonBit3)));
-        leds.add(new Led(5,(ImageView) findViewById(R.id.buttonBit4)));
-        leds.add(new Led(6,(ImageView) findViewById(R.id.buttonBit5)));
-        leds.add(new Led(7,(ImageView) findViewById(R.id.buttonBit6)));
-        leds.add(new Led(8,(ImageView) findViewById(R.id.buttonBit7)));
+        leds.add(new Led(6,(ImageView) findViewById(R.id.buttonBit4)));
+        leds.add(new Led(7,(ImageView) findViewById(R.id.buttonBit5)));
+        leds.add(new Led(8,(ImageView) findViewById(R.id.buttonBit6)));
+        leds.add(new Led(9,(ImageView) findViewById(R.id.buttonBit7)));
 
 
         final RelativeLayout layout = (RelativeLayout) findViewById(R.id.toogleLayout);
 
         ToggleListener listener = new ToggleListener();
-        layout.setOnDragListener(listener);
         layout.setOnTouchListener(listener);
+        //layout.setOnDragListener(listener);
     }
 
 
@@ -64,55 +64,57 @@ public class Toggle extends AppCompatActivity {
             this.image = image;
             this.rect = new Rect();
             this.on = false;
-            image.getHitRect(rect);
-
-
-            int[] posXY = new int[2];
-            image.getLocationOnScreen(posXY);
-            int x = posXY[0];
-            int y = posXY[1];
-
-            rect.set(x,y,x+image.getWidth(),y+image.getHeight());
-
-            Log.d(Connect.LOG_TAG,"Constructor : "+rect.toShortString());
-
-
+            this.image.setVisibility(View.INVISIBLE);
         }
 
 
         public void drag(boolean isOnMe){
-            if(Toggle.lock)return;
-            if (isOnMe && !on){
+            if (isOnMe){
                 on();
             }
-            else if(!isOnMe && on){
+            else{
                 off();
             }
-
         }
 
         public void touch(boolean isOnMe, boolean down){
-            if(!isOnMe)return;
 
-            if(down && Toggle.lock){
-                toggle();
+            /*
+            if(!isOnMe)return;
+            Log.d(Connect.LOG_TAG,"WORKING !! TOUCH "+id);
+
+            if(down){
+                on();
             }
-            else if(!down && on){
+            else if(!down){
                 off();
             }
-
+            */
         }
 
         public void on(){
+            if(on)return;
             this.image.setVisibility(View.VISIBLE);
+            Pack p = new Pack(Pack.ON);
+            p.getData().put(Pack.ID,id);
+            Pack.sendPack(p,Connexion.output);
+            on = true;
         }
 
         public void off(){
+            if(!on)return;
             this.image.setVisibility(View.INVISIBLE);
+            Pack p = new Pack(Pack.OFF);
+            p.getData().put(Pack.ID,id);
+            Pack.sendPack(p,Connexion.output);
+            on = false;
         }
 
         public void toggle(){
-
+            Pack p = new Pack(Pack.TOGGLE);
+            p.getData().put(Pack.ID,id);
+            Pack.sendPack(p,Connexion.output);
+            on = !on;
         }
 
 
@@ -123,8 +125,10 @@ public class Toggle extends AppCompatActivity {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
+
+            Log.d(Connect.LOG_TAG,"We are draging !");
             for(Led l : Toggle.leds){
-                l.drag(l.rect.contains((int)event.getX(),(int)event.getY()));
+                //l.drag(l.rect.contains((int)event.getX(),(int)event.getY()));
             }
             return true;
         }
@@ -133,13 +137,22 @@ public class Toggle extends AppCompatActivity {
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
                 for(Led l : Toggle.leds){
-                    l.touch(l.rect.contains((int)event.getX(),(int)event.getY()),true);
+                    l.image.getHitRect(l.rect);
+                    l.drag(l.rect.contains((int)event.getX(),(int)event.getY()));
                 }
             } else if (event.getAction() == android.view.MotionEvent.ACTION_UP) {
                 for(Led l : Toggle.leds){
-                    l.touch(l.rect.contains((int)event.getX(),(int)event.getY()),false);
+                    l.image.getHitRect(l.rect);
+                    l.drag(false);
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_MOVE){
+                for(Led l : Toggle.leds){
+                    l.image.getHitRect(l.rect);
+                    l.drag(l.rect.contains((int)event.getX(),(int)event.getY()));
                 }
             }
+
+
             return true;
         }
     }

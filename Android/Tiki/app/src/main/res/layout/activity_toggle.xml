@@ -23,7 +23,7 @@
         android:id="@+id/buttonBit5"
         android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit7"
-        android:layout_toStartOf="@+id/buttonBit3" />
+        android:layout_toEndOf="@+id/buttonBit7" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -31,7 +31,7 @@
         android:id="@+id/buttonBit3"
         android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit5"
-        android:layout_toEndOf="@+id/buttonLeftEye" />
+        android:layout_toEndOf="@+id/buttonBit5" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -39,31 +39,32 @@
         android:id="@+id/buttonBit1"
         android:background="@drawable/green_circle"
         android:layout_alignTop="@+id/buttonBit3"
-        android:layout_toEndOf="@+id/buttonBit3" />
+        android:layout_alignStart="@+id/buttonRightEye"
+        android:layout_marginStart="30dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit6"
+        android:background="@drawable/green_circle"
         android:layout_below="@+id/buttonBit5"
-        android:layout_toStartOf="@+id/buttonBit5"
-        android:background="@drawable/green_circle" />
+        android:layout_alignStart="@+id/buttonBit5" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit4"
         android:background="@drawable/green_circle"
-        android:layout_below="@+id/buttonBit5"
-        android:layout_toStartOf="@+id/buttonBit3" />
+        android:layout_alignTop="@+id/buttonBit6"
+        android:layout_toStartOf="@+id/buttonRightEye" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonBit2"
         android:background="@drawable/green_circle"
-        android:layout_below="@+id/buttonBit3"
-        android:layout_toStartOf="@+id/buttonBit1" />
+        android:layout_alignTop="@+id/buttonBit4"
+        android:layout_toEndOf="@+id/buttonBit3" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -77,11 +78,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonLeftEye"
-        android:layout_marginTop="131dp"
+        android:layout_marginTop="140dp"
         android:background="@drawable/blue_circle"
         android:layout_alignWithParentIfMissing="false"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/buttonBit7" />
+        android:layout_alignStart="@+id/buttonBit7"
+        android:layout_marginStart="32dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -89,5 +91,7 @@
         android:id="@+id/buttonRightEye"
         android:background="@drawable/blue_circle"
         android:layout_alignTop="@+id/buttonLeftEye"
-        android:layout_toEndOf="@+id/buttonBit3" />
+        android:layout_toEndOf="@+id/buttonBit3"
+        android:layout_marginStart="30dp" />
+
 </RelativeLayout>
